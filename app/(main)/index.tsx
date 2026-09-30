@@ -216,7 +216,7 @@ export default function OverviewScreen() {
         )}
 
         {/* METRICAS GRID */}
-        <Text style={styles.sectionTitle}>Resumo do Lar</Text>
+        <Text style={styles.sectionTitle}>O que temos para hoje?</Text>
         <View style={styles.grid}>
           
           {/* Metric 1: Tarefas de Hoje */}
