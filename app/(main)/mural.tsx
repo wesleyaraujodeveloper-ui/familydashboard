@@ -174,7 +174,7 @@ export default function MuralScreen() {
     if (item.type === 'notice') {
       return (
         <TouchableOpacity key={item.id + 'notice'} onPress={() => router.push(`/(main)/recado/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={styles.noticeCard}>
+          <Card elevation="none" style={[styles.baseCard, styles.noticeCard]}>
             {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
             <Text style={styles.noticeText}>📌 {item.text}</Text>
             {renderCardFooter(item)}
@@ -184,21 +184,23 @@ export default function MuralScreen() {
     }
     if (item.type === 'event') {
       const dateObj = new Date(item.start_time!);
-      const formattedDate = dateObj.toLocaleDateString('pt-BR');
+      const formattedDate = dateObj.toLocaleDateString('pt-BR', { month: 'short', day: 'numeric' });
       const formattedTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       return (
         <TouchableOpacity key={item.id + 'event'} onPress={() => router.push(`/(main)/compromisso/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={styles.eventCard}>
-            <View style={styles.eventLeft}>
-              <Text style={styles.eventDateText}>{formattedDate}</Text>
-              <Text style={styles.eventTimeText}>{formattedTime}</Text>
+          <Card elevation="none" style={[styles.baseCard, { padding: theme.spacing.md }]}>
+            <View style={styles.eventCard}>
+              <View style={styles.eventLeft}>
+                <Text style={styles.eventDateText}>{formattedDate}</Text>
+                <Text style={styles.eventTimeText}>{formattedTime}</Text>
+              </View>
+              <View style={styles.eventRight}>
+                {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
+                <Text style={styles.taskTitle}>📅 {item.title}</Text>
+                {item.description ? <Text style={styles.taskDesc} numberOfLines={2}>{item.description}</Text> : null}
+              </View>
             </View>
-            <View style={styles.eventRight}>
-              {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
-              <Text style={styles.taskTitle}>📅 {item.title}</Text>
-              {item.description ? <Text style={styles.taskDesc} numberOfLines={2}>{item.description}</Text> : null}
-              {renderCardFooter(item)}
-            </View>
+            {renderCardFooter(item)}
           </Card>
         </TouchableOpacity>
       );
@@ -206,7 +208,7 @@ export default function MuralScreen() {
     if (item.type === 'list') {
       return (
         <TouchableOpacity key={item.id + 'list'} onPress={() => router.push(`/(main)/lista/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={styles.listCard}>
+          <Card elevation="none" style={[styles.baseCard, styles.listCard]}>
             {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
             <Text style={styles.listTitle}>📋 {item.title}</Text>
             {renderCardFooter(item)}
@@ -217,7 +219,7 @@ export default function MuralScreen() {
     if (item.type === 'idea') {
       return (
         <TouchableOpacity key={item.id + 'idea'} onPress={() => router.push(`/(main)/ideia/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={styles.ideaCard}>
+          <Card elevation="none" style={[styles.baseCard, styles.ideaCard]}>
             {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
             <Text style={styles.ideaTitle}>💡 {item.title}</Text>
             {item.description ? <Text style={styles.taskDesc}>{item.description}</Text> : null}
@@ -229,12 +231,12 @@ export default function MuralScreen() {
     // type === 'task'
     return (
       <TouchableOpacity key={item.id + 'task'} onPress={() => router.push(`/(main)/tarefa/${item.id}` as any)} activeOpacity={0.8}>
-        <Card elevation="level1" style={[styles.taskCard, item.status === 'done' && styles.taskCardCompleted]}>
+        <Card elevation="none" style={[styles.baseCard, styles.taskCard, item.status === 'done' && styles.taskCardCompleted]}>
           {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
           <View style={styles.taskHeader}>
             <Text style={[styles.taskTitle, item.status === 'done' && styles.taskTitleCompleted]}>✅ {item.title}</Text>
             <View style={[styles.badge, styles[`priority_${item.priority}` as keyof typeof styles]]}>
-              <Text style={styles.badgeText}>{item.priority}</Text>
+              <Text style={[styles.badgeText, styles[`priority_${item.priority}_text` as keyof typeof styles]]}>{item.priority}</Text>
             </View>
           </View>
           {item.description ? <Text style={styles.taskDesc} numberOfLines={2}>{item.description}</Text> : null}
@@ -408,47 +410,86 @@ const styles = StyleSheet.create({
   emptyText: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textMuted },
   
   // Kanban Board
-  boardScroll: { paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.xl, gap: 16, flexGrow: 1 },
-  boardColumn: { backgroundColor: '#f0f2f5', borderRadius: theme.radius.lg, padding: theme.spacing.md, flex: 1 },
-  columnHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: theme.spacing.md },
-  columnDot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },
-  columnTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, flex: 1 },
-  columnCount: { backgroundColor: '#e4e6ea', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 12 },
-  columnCountText: { fontSize: 12, fontWeight: 'bold', color: theme.colors.textSecondary },
+  boardScroll: { paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.xl, gap: 20, flexGrow: 1 },
+  boardColumn: { backgroundColor: '#F8FAFC', borderRadius: 24, padding: theme.spacing.md, flex: 1, borderWidth: 1, borderColor: '#F1F5F9' },
+  columnHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: theme.spacing.md, paddingHorizontal: 4 },
+  columnDot: { width: 12, height: 12, borderRadius: 6, marginRight: 10 },
+  columnTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '800', color: '#1E293B', flex: 1 },
+  columnCount: { backgroundColor: '#E2E8F0', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  columnCountText: { fontSize: 12, fontWeight: 'bold', color: '#475569' },
 
   cardFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing.md, paddingTop: theme.spacing.sm, borderTopWidth: 1, borderColor: 'rgba(0,0,0,0.05)' },
   arrowBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f2f5', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 },
   arrowBtnText: { fontSize: 12, color: theme.colors.textSecondary, fontWeight: 'bold', marginHorizontal: 4 },
 
-  // Cards
-  cardImage: { width: '100%', height: 120, borderRadius: 6, marginBottom: theme.spacing.sm },
-  taskCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#e8f5e9', borderLeftWidth: 4, borderLeftColor: '#4caf50' },
-  taskCardCompleted: { borderLeftColor: theme.colors.success, opacity: 0.6 },
-  taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  // Cards (ZenZ Aesthetic)
+  cardImage: { width: '100%', height: 120, borderRadius: 12, marginBottom: theme.spacing.sm },
+  
+  // Base Card Style
+  baseCard: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.02)'
+  },
+  
+  taskCard: { 
+    // Uses baseCard
+  },
+  taskCardCompleted: { opacity: 0.5 },
+  taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   taskTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, flex: 1 },
-  taskTitleCompleted: { textDecorationLine: 'line-through' },
-  taskDesc: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginTop: theme.spacing.sm },
+  taskTitleCompleted: { textDecorationLine: 'line-through', color: theme.colors.textMuted },
+  taskDesc: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginTop: theme.spacing.xs },
   
-  badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
-  badgeText: { fontSize: 10, fontWeight: 'bold', color: '#fff', textTransform: 'uppercase' },
-  priority_high: { backgroundColor: theme.colors.error },
-  priority_medium: { backgroundColor: theme.colors.warning },
-  priority_low: { backgroundColor: theme.colors.secondary },
+  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  badgeText: { fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' },
+  priority_high: { backgroundColor: '#FEE2E2' },
+  priority_high_text: { color: '#B91C1C' },
+  priority_medium: { backgroundColor: '#FEF3C7' },
+  priority_medium_text: { color: '#B45309' },
+  priority_low: { backgroundColor: '#E0E7FF' },
+  priority_low_text: { color: '#4338CA' },
   
-  noticeCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#fff3e0', borderLeftWidth: 4, borderLeftColor: '#ff9800' },
-  noticeText: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textPrimary, fontStyle: 'italic' },
+  noticeCard: { 
+    backgroundColor: '#FFFBEB',
+    borderColor: '#FEF3C7'
+  },
+  noticeText: { fontSize: theme.typography.sizes.bodyLg, color: '#92400E', fontStyle: 'italic', lineHeight: 22 },
   
-  eventCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, flexDirection: 'row', alignItems: 'center', backgroundColor: '#ffebee', borderLeftWidth: 4, borderLeftColor: '#f44336' },
-  eventLeft: { paddingRight: theme.spacing.md, borderRightWidth: 1, borderColor: 'rgba(0,0,0,0.1)', marginRight: theme.spacing.md, alignItems: 'center', minWidth: 60 },
+  eventCard: { 
+    flexDirection: 'row', alignItems: 'center'
+  },
+  eventLeft: { 
+    backgroundColor: '#FEE2E2',
+    padding: theme.spacing.md,
+    borderRadius: 16,
+    marginRight: theme.spacing.md, 
+    alignItems: 'center', 
+    minWidth: 65 
+  },
   eventRight: { flex: 1 },
-  eventDateText: { fontSize: theme.typography.sizes.bodySm, fontWeight: 'bold', color: '#f44336' },
-  eventTimeText: { fontSize: theme.typography.sizes.bodyLg, fontWeight: 'bold', color: theme.colors.textPrimary },
+  eventDateText: { fontSize: 12, fontWeight: 'bold', color: '#B91C1C', textTransform: 'uppercase' },
+  eventTimeText: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#991B1B' },
   
-  listCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#e0f7fa', borderLeftWidth: 4, borderLeftColor: '#00bcd4' },
-  listTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary },
+  listCard: { 
+    backgroundColor: '#F0FDF4',
+    borderColor: '#DCFCE7'
+  },
+  listTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#166534' },
   
-  ideaCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#fffde7', borderLeftWidth: 4, borderLeftColor: '#ffeb3b' },
-  ideaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.xs },
+  ideaCard: { 
+    backgroundColor: '#F8FAFC',
+    borderColor: '#E2E8F0'
+  },
+  ideaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#334155', marginBottom: theme.spacing.xs },
 
   // --- Modal Styles ---
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center', padding: theme.spacing.lg },
