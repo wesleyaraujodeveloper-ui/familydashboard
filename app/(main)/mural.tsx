@@ -188,8 +188,8 @@ export default function MuralScreen() {
       const formattedTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       return (
         <TouchableOpacity key={item.id + 'event'} onPress={() => router.push(`/(main)/compromisso/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={[styles.baseCard, { padding: theme.spacing.md }]}>
-            <View style={styles.eventCard}>
+          <Card elevation="level1" style={[styles.baseCard, styles.eventCard]}>
+            <View style={styles.eventInner}>
               <View style={styles.eventLeft}>
                 <Text style={styles.eventDateText}>{formattedDate}</Text>
                 <Text style={styles.eventTimeText}>{formattedTime}</Text>
@@ -473,7 +473,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffebee',
     borderLeftWidth: 6,
     borderLeftColor: '#f44336',
-    borderColor: '#ffcdd2',
+    borderColor: '#ffcdd2'
+  },
+  eventInner: {
     flexDirection: 'row', 
     alignItems: 'center'
   },
