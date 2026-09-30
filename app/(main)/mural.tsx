@@ -264,8 +264,8 @@ export default function MuralScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.title}>Mural da Casa 🏠</Text>
-          <Text style={styles.subtitle}>Organização colaborativa das rotinas e projetos.</Text>
+          <Text style={styles.title}>{activeSpace.name} 🏠</Text>
+          <Text style={styles.subtitle}>Espaço para organização das rotinas e projetos.</Text>
         </View>
         <View style={styles.headerActions}>
           <Button title="✨ Novo item no espaço" onPress={() => setIsAddModalOpen(true)} />
