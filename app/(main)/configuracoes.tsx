@@ -92,11 +92,13 @@ export default function SettingsScreen() {
       </Card>
 
       <View style={styles.brandContainer}>
-        <Image 
-          source={require('../../assets/images/we-logo.png')} 
-          style={styles.brandLogo} 
-          resizeMode="contain"
-        />
+        <View style={styles.brandLogoWrapper}>
+          <Image 
+            source={require('../../assets/images/we-logo.png')} 
+            style={styles.brandLogo} 
+            resizeMode="cover"
+          />
+        </View>
         <Text style={styles.brandText}>Desenvolvido por We! Digital Tecnology</Text>
       </View>
     </ScrollView>
@@ -109,7 +111,8 @@ const styles = StyleSheet.create({
   card: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, maxWidth: 600 },
   sectionTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '600', color: theme.colors.textPrimary, marginBottom: theme.spacing.sm },
   text: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginBottom: 4 },
-  brandContainer: { alignItems: 'center', marginTop: theme.spacing.xxxl, paddingVertical: theme.spacing.xl, opacity: 0.7 },
-  brandLogo: { width: 120, height: 120, marginBottom: theme.spacing.sm },
-  brandText: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, fontWeight: '500' }
+  brandContainer: { alignItems: 'center', marginTop: theme.spacing.xxxl, paddingVertical: theme.spacing.xl, opacity: 0.8 },
+  brandLogoWrapper: { width: 100, height: 100, borderRadius: 30, overflow: 'hidden', marginBottom: theme.spacing.md, backgroundColor: '#fff', elevation: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8 },
+  brandLogo: { width: '100%', height: '100%', transform: [{ scale: 1.35 }] },
+  brandText: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, fontWeight: 'bold' }
 });
