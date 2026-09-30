@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, Image, ScrollView } from 'react-native';
 import { theme } from '../../src/theme';
 import { Button } from '../../src/components/ui/Button';
 import { Card } from '../../src/components/ui/Card';
@@ -53,7 +53,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <Text style={styles.title}>Configurações</Text>
       
       <Card elevation="level1" style={styles.card}>
@@ -90,7 +90,16 @@ export default function SettingsScreen() {
           style={{ marginTop: theme.spacing.xl, alignSelf: 'flex-start' }}
         />
       </Card>
-    </View>
+
+      <View style={styles.brandContainer}>
+        <Image 
+          source={require('../../assets/images/we-logo.png')} 
+          style={styles.brandLogo} 
+          resizeMode="contain"
+        />
+        <Text style={styles.brandText}>Desenvolvido por We! Digital Tecnology</Text>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -99,5 +108,8 @@ const styles = StyleSheet.create({
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.lg },
   card: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, maxWidth: 600 },
   sectionTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '600', color: theme.colors.textPrimary, marginBottom: theme.spacing.sm },
-  text: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginBottom: 4 }
+  text: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginBottom: 4 },
+  brandContainer: { alignItems: 'center', marginTop: theme.spacing.xxxl, paddingVertical: theme.spacing.xl, opacity: 0.7 },
+  brandLogo: { width: 120, height: 120, marginBottom: theme.spacing.sm },
+  brandText: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, fontWeight: '500' }
 });
