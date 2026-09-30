@@ -33,8 +33,8 @@ export default function RootLayout() {
           .eq('group_members.profile_id', session.user.id);
 
         if (!data || data.length === 0) {
-          // Sem grupo -> Onboarding
-          if (!inOnboarding) {
+          // Sem grupo -> Onboarding (mas não na welcome)
+          if (!inOnboarding || segments[1] === 'welcome') {
             router.replace('/(onboarding)/create-group' as any);
           }
         } else {
