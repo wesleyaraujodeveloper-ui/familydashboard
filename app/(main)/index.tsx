@@ -325,7 +325,7 @@ export default function OverviewScreen() {
 
       {/* FLOATING ACTION BUTTON */}
       <TouchableOpacity 
-        style={styles.floatingButtonTopRight} 
+        style={styles.floatingButton} 
         onPress={() => router.push('/(main)/criar-tarefa')}
       >
         <LinearGradient
@@ -618,9 +618,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 16
   },
-  floatingButtonTopRight: {
+  floatingButton: {
     position: 'absolute',
-    top: 90,
+    bottom: 24,
     right: 24,
     width: 56,
     height: 56,
