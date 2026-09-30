@@ -9,6 +9,25 @@ import { useSpace } from '../../src/store/space';
 import { supabase } from '../../src/services/supabase';
 import { Avatar } from '../../src/components/ui/Avatar';
 
+const SidebarLink = ({ href, icon, label, isActive, onPress }: any) => {
+  if (onPress) {
+    return (
+      <TouchableOpacity onPress={onPress} style={[styles.navItem, isActive && styles.navItemActive]}>
+        <Feather name={icon as any} size={20} color={isActive ? theme.colors.primary : theme.colors.textSecondary} />
+        <Text style={[styles.navText, isActive && styles.navTextActive]}>{label}</Text>
+      </TouchableOpacity>
+    );
+  }
+  return (
+    <Link href={href} asChild>
+      <TouchableOpacity style={[styles.navItem, isActive && styles.navItemActive]}>
+        <Feather name={icon as any} size={20} color={isActive ? theme.colors.primary : theme.colors.textSecondary} />
+        <Text style={[styles.navText, isActive && styles.navTextActive]}>{label}</Text>
+      </TouchableOpacity>
+    </Link>
+  );
+};
+
 export default function MainLayout() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768; // Desktop Breakpoint
@@ -54,34 +73,39 @@ export default function MainLayout() {
       <View style={styles.desktopContainer}>
         {/* SIDEBAR DESKTOP */}
         <View style={styles.sidebar}>
-          <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <Text style={styles.logo}>{activeGroup?.name || 'Mural'}</Text>
-            <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.primary} />
+          <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={styles.groupSwitcherBtn}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <View style={styles.groupIcon}><Feather name="users" size={16} color="#fff" /></View>
+              <Text style={styles.logo}>{activeGroup?.name || 'Mural'}</Text>
+            </View>
+            <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.textSecondary} />
           </TouchableOpacity>
           
-          <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+          <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, marginTop: 12 }}>
           
           {showGroupSwitcher && (
-            <View style={{ marginBottom: 16, backgroundColor: '#f0f0f0', borderRadius: 8, padding: 8 }}>
+            <View style={styles.groupDropdown}>
               {groups.map(g => (
-                <TouchableOpacity key={g.id} onPress={() => switchGroup(g)} style={{ paddingVertical: 8, borderBottomWidth: 1, borderColor: theme.colors.border }}>
+                <TouchableOpacity key={g.id} onPress={() => switchGroup(g)} style={styles.groupOption}>
                   <Text style={{ fontWeight: g.id === activeGroup?.id ? 'bold' : 'normal', color: g.id === activeGroup?.id ? theme.colors.primary : theme.colors.textSecondary }}>{g.name}</Text>
                 </TouchableOpacity>
               ))}
-              <TouchableOpacity onPress={() => { setShowGroupSwitcher(false); router.push('/(onboarding)/create-group' as any); }} style={{ paddingVertical: 8 }}>
-                <Text style={{ color: theme.colors.primary }}>+ Entrar ou Criar Grupo</Text>
+              <TouchableOpacity onPress={() => { setShowGroupSwitcher(false); router.push('/(onboarding)/create-group' as any); }} style={styles.groupOption}>
+                <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>+ Entrar ou Criar Grupo</Text>
               </TouchableOpacity>
             </View>
           )}
 
-          <Link href={"/(main)" as any} style={styles.navLink}>Início</Link>
-          <Link href={"/(main)/meu-dia" as any} style={styles.navLink}>Meu Dia</Link>
-          <Link href={"/(main)/calendario" as any} style={styles.navLink}>Calendário</Link>
+          <View style={styles.mainNav}>
+            <SidebarLink href="/(main)" icon="home" label="Início" isActive={pathname === '/'} />
+            <SidebarLink href="/(main)/meu-dia" icon="sun" label="Meu Dia" isActive={pathname === '/meu-dia'} />
+            <SidebarLink href="/(main)/calendario" icon="calendar" label="Calendário" isActive={pathname === '/calendario'} />
+          </View>
 
           <View style={styles.spaceSection}>
-            <Text style={styles.sectionTitle}>Espaços</Text>
+            <Text style={styles.sectionTitle}>ESPAÇOS</Text>
             {spaces.map(space => (
-              <Text 
+              <TouchableOpacity 
                 key={space.id} 
                 style={[styles.spaceLink, activeSpace?.id === space.id && pathname === '/mural' ? styles.spaceLinkActive : null]}
                 onPress={() => {
@@ -89,38 +113,49 @@ export default function MainLayout() {
                   router.push('/(main)/mural' as any);
                 }}
               >
-                # {space.name}
-              </Text>
+                <Feather name="hash" size={16} color={activeSpace?.id === space.id && pathname === '/mural' ? theme.colors.primary : theme.colors.textMuted} />
+                <Text style={[styles.spaceLinkText, activeSpace?.id === space.id && pathname === '/mural' ? styles.spaceLinkTextActive : null]}>
+                  {space.name}
+                </Text>
+              </TouchableOpacity>
             ))}
-            <Link href={"/(main)/criar-espaco" as any} style={styles.createSpaceLink}>+ Novo Espaço</Link>
-            <Link href={"/(main)/gerenciar-espacos" as any} style={styles.manageSpaceLink}>⚙️ Gerenciar Espaços</Link>
+            <TouchableOpacity onPress={() => router.push('/(main)/criar-espaco' as any)} style={styles.sidebarActionBtn}>
+              <Feather name="plus-circle" size={14} color={theme.colors.primary} />
+              <Text style={styles.sidebarActionText}>Novo Espaço</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/(main)/gerenciar-espacos' as any)} style={styles.sidebarActionBtn}>
+              <Feather name="settings" size={14} color={theme.colors.textSecondary} />
+              <Text style={[styles.sidebarActionText, { color: theme.colors.textSecondary }]}>Gerenciar</Text>
+            </TouchableOpacity>
           </View>
           
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 1, minHeight: 40 }} />
           
           <View style={styles.membersSection}>
-            <Text style={styles.sectionTitle}>Membros</Text>
+            <Text style={styles.sectionTitle}>MEMBROS</Text>
             {groupMembers.map(m => (
               <View key={m.id} style={styles.sidebarMemberItem}>
                 <Avatar name={m.name} url={m.avatar_url} size="sm" />
-                <View style={{ marginLeft: 8 }}>
+                <View style={{ marginLeft: 10, flex: 1 }}>
                   <Text style={styles.sidebarMemberName} numberOfLines={1}>{m.name.split(' ')[0]}</Text>
                   <Text style={styles.sidebarMemberRole}>{m.role === 'admin' ? 'Admin' : 'Membro'}</Text>
                 </View>
               </View>
             ))}
-            <TouchableOpacity onPress={() => router.push('/(main)/membros' as any)} style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => router.push('/(main)/membros' as any)} style={[styles.sidebarActionBtn, { marginTop: 12 }]}>
               <Feather name="user-plus" size={14} color={theme.colors.primary} />
-              <Text style={[styles.navLink, { paddingVertical: 4, marginLeft: 8, fontSize: 13, color: theme.colors.primary }]}>Convidar</Text>
+              <Text style={styles.sidebarActionText}>Convidar Membro</Text>
             </TouchableOpacity>
           </View>
           
-          <Link href={"/(main)/notificacoes" as any} style={styles.navLink}>Notificações</Link>
-          <Link href={"/(main)/historico" as any} style={styles.navLink}>Histórico</Link>
-          <Link href={"/(main)/membros" as any} style={styles.navLink}>Membros</Link>
-          <Link href={"/(main)/configuracoes" as any} style={styles.navLink}>Configurações</Link>
+          <View style={styles.footerLinks}>
+            <SidebarLink href="/(main)/notificacoes" icon="bell" label="Notificações" isActive={pathname === '/notificacoes'} />
+            <SidebarLink href="/(main)/historico" icon="clock" label="Histórico" isActive={pathname === '/historico'} />
+            <SidebarLink href="/(main)/membros" icon="users" label="Membros" isActive={pathname === '/membros'} />
+            <SidebarLink href="/(main)/configuracoes" icon="settings" label="Configurações" isActive={pathname === '/configuracoes'} />
+          </View>
           
-          <View style={{ height: 40 }} />
+          <View style={{ height: 20 }} />
           </ScrollView>
         </View>
 
@@ -156,86 +191,88 @@ export default function MainLayout() {
       <Modal visible={mobileMenuOpen} transparent animationType="fade">
         <View style={{ flex: 1, flexDirection: 'row' }}>
           {/* Menu Drawer */}
-          <View style={{ width: 280, backgroundColor: theme.colors.surface, height: '100%', padding: theme.spacing.lg, paddingTop: 60, elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10 }}>
+          <View style={{ width: 300, backgroundColor: theme.colors.surface, height: '100%', padding: theme.spacing.lg, paddingTop: 60, elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10 }}>
             
-            <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <Text style={styles.logo}>{activeGroup?.name || 'Mural'}</Text>
-              <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.primary} />
+            <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={styles.groupSwitcherBtn}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <View style={styles.groupIcon}><Feather name="users" size={16} color="#fff" /></View>
+                <Text style={styles.logo}>{activeGroup?.name || 'Mural'}</Text>
+              </View>
+              <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.textSecondary} />
             </TouchableOpacity>
 
+            <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, marginTop: 12 }}>
             {showGroupSwitcher && (
-              <View style={{ marginBottom: 16, backgroundColor: '#f0f0f0', borderRadius: 8, padding: 8 }}>
+              <View style={styles.groupDropdown}>
                 {groups.map(g => (
-                  <TouchableOpacity key={g.id} onPress={() => switchGroup(g)} style={{ paddingVertical: 8, borderBottomWidth: 1, borderColor: theme.colors.border }}>
+                  <TouchableOpacity key={g.id} onPress={() => switchGroup(g)} style={styles.groupOption}>
                     <Text style={{ fontWeight: g.id === activeGroup?.id ? 'bold' : 'normal', color: g.id === activeGroup?.id ? theme.colors.primary : theme.colors.textSecondary }}>{g.name}</Text>
                   </TouchableOpacity>
                 ))}
-                <TouchableOpacity onPress={() => { setShowGroupSwitcher(false); setMobileMenuOpen(false); router.push('/(onboarding)/create-group' as any); }} style={{ paddingVertical: 8 }}>
-                  <Text style={{ color: theme.colors.primary }}>+ Entrar ou Criar Grupo</Text>
+                <TouchableOpacity onPress={() => { setShowGroupSwitcher(false); setMobileMenuOpen(false); router.push('/(onboarding)/create-group' as any); }} style={styles.groupOption}>
+                  <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>+ Entrar ou Criar Grupo</Text>
                 </TouchableOpacity>
               </View>
             )}
 
-            <View style={[styles.spaceSection, { flex: 1 }]}>
-              <Text style={styles.sectionTitle}>Espaços</Text>
-              <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                {spaces.map(space => (
-                  <TouchableOpacity 
-                    key={space.id} 
-                    onPress={() => {
-                      setActiveSpace(space);
-                      setMobileMenuOpen(false);
-                      if (pathname !== '/mural') router.push('/(main)/mural' as any);
-                    }}
-                    style={{ paddingVertical: 12, borderBottomWidth: 1, borderColor: theme.colors.border }}
-                  >
-                    <Text style={[
-                      { fontSize: 16, color: theme.colors.textSecondary },
-                      activeSpace?.id === space.id && { color: theme.colors.primary, fontWeight: 'bold' }
-                    ]}>
-                      # {space.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-                <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/criar-espaco' as any); }}>
-                  <Text style={{ fontSize: 16, color: theme.colors.primary, marginTop: 16, fontWeight: 'bold', paddingVertical: 12 }}>+ Novo Espaço</Text>
+            <View style={styles.mainNav}>
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)' as any); }} icon="home" label="Início" isActive={pathname === '/'} />
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/meu-dia' as any); }} icon="sun" label="Meu Dia" isActive={pathname === '/meu-dia'} />
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/calendario' as any); }} icon="calendar" label="Calendário" isActive={pathname === '/calendario'} />
+            </View>
+
+            <View style={styles.spaceSection}>
+              <Text style={styles.sectionTitle}>ESPAÇOS</Text>
+              {spaces.map(space => (
+                <TouchableOpacity 
+                  key={space.id} 
+                  style={[styles.spaceLink, activeSpace?.id === space.id && pathname === '/mural' ? styles.spaceLinkActive : null]}
+                  onPress={() => {
+                    setActiveSpace(space);
+                    setMobileMenuOpen(false);
+                    if (pathname !== '/mural') router.push('/(main)/mural' as any);
+                  }}
+                >
+                  <Feather name="hash" size={16} color={activeSpace?.id === space.id && pathname === '/mural' ? theme.colors.primary : theme.colors.textMuted} />
+                  <Text style={[styles.spaceLinkText, activeSpace?.id === space.id && pathname === '/mural' ? styles.spaceLinkTextActive : null]}>
+                    {space.name}
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/gerenciar-espacos' as any); }}>
-                  <Text style={{ fontSize: 16, color: theme.colors.textSecondary, fontWeight: 'bold', paddingVertical: 12 }}>⚙️ Gerenciar Espaços</Text>
-                </TouchableOpacity>
-              </ScrollView>
+              ))}
+              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/criar-espaco' as any); }} style={styles.sidebarActionBtn}>
+                <Feather name="plus-circle" size={14} color={theme.colors.primary} />
+                <Text style={styles.sidebarActionText}>Novo Espaço</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/gerenciar-espacos' as any); }} style={styles.sidebarActionBtn}>
+                <Feather name="settings" size={14} color={theme.colors.textSecondary} />
+                <Text style={[styles.sidebarActionText, { color: theme.colors.textSecondary }]}>Gerenciar</Text>
+              </TouchableOpacity>
             </View>
             
             <View style={styles.membersSection}>
-              <Text style={styles.sectionTitle}>Membros</Text>
-              <ScrollView style={{ maxHeight: 120 }}>
-                {groupMembers.map(m => (
-                  <View key={m.id} style={styles.sidebarMemberItem}>
-                    <Avatar name={m.name} url={m.avatar_url} size="sm" />
-                    <View style={{ marginLeft: 8 }}>
-                      <Text style={styles.sidebarMemberName} numberOfLines={1}>{m.name.split(' ')[0]}</Text>
-                      <Text style={styles.sidebarMemberRole}>{m.role === 'admin' ? 'Admin' : 'Membro'}</Text>
-                    </View>
+              <Text style={styles.sectionTitle}>MEMBROS</Text>
+              {groupMembers.map(m => (
+                <View key={m.id} style={styles.sidebarMemberItem}>
+                  <Avatar name={m.name} url={m.avatar_url} size="sm" />
+                  <View style={{ marginLeft: 10, flex: 1 }}>
+                    <Text style={styles.sidebarMemberName} numberOfLines={1}>{m.name.split(' ')[0]}</Text>
+                    <Text style={styles.sidebarMemberRole}>{m.role === 'admin' ? 'Admin' : 'Membro'}</Text>
                   </View>
-                ))}
-              </ScrollView>
-              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/membros' as any); }} style={{ marginTop: 8, flexDirection: 'row', alignItems: 'center' }}>
+                </View>
+              ))}
+              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/membros' as any); }} style={[styles.sidebarActionBtn, { marginTop: 12 }]}>
                 <Feather name="user-plus" size={14} color={theme.colors.primary} />
-                <Text style={{ fontSize: 14, color: theme.colors.primary, marginLeft: 8, fontWeight: 'bold' }}>Convidar Membro</Text>
+                <Text style={styles.sidebarActionText}>Convidar Membro</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={{ paddingTop: 16, borderTopWidth: 1, borderColor: theme.colors.border, marginTop: 8 }}>
-              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/historico' as any); }}>
-                 <Text style={styles.navLink}>Histórico</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/membros' as any); }}>
-                 <Text style={styles.navLink}>Membros</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/(main)/configuracoes' as any); }}>
-                 <Text style={styles.navLink}>Configurações</Text>
-              </TouchableOpacity>
+            <View style={styles.footerLinks}>
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/historico' as any); }} icon="clock" label="Histórico" isActive={pathname === '/historico'} />
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/configuracoes' as any); }} icon="settings" label="Configurações" isActive={pathname === '/configuracoes'} />
             </View>
+            
+            <View style={{ height: 40 }} />
+            </ScrollView>
           </View>
           
           {/* Overlay to close */}
@@ -249,10 +286,30 @@ export default function MainLayout() {
 
       {/* BOTTOM TABS MOBILE */}
       <View style={styles.bottomTabs}>
-        <Link href={"/(main)" as any} style={styles.tabItem}>Início</Link>
-        <Link href={"/(main)/meu-dia" as any} style={styles.tabItem}>Meu Dia</Link>
-        <Link href={"/(main)/mural" as any} style={styles.tabItem}>Mural</Link>
-        <Link href={"/(main)/calendario" as any} style={styles.tabItem}>Agenda</Link>
+        <Link href={"/(main)" as any} asChild>
+          <TouchableOpacity style={styles.tabItemContainer}>
+            <Feather name="home" size={24} color={pathname === '/' ? theme.colors.primary : theme.colors.textSecondary} />
+            <Text style={[styles.tabItem, pathname === '/' && { color: theme.colors.primary }]}>Início</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href={"/(main)/meu-dia" as any} asChild>
+          <TouchableOpacity style={styles.tabItemContainer}>
+            <Feather name="sun" size={24} color={pathname === '/meu-dia' ? theme.colors.primary : theme.colors.textSecondary} />
+            <Text style={[styles.tabItem, pathname === '/meu-dia' && { color: theme.colors.primary }]}>Meu Dia</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href={"/(main)/mural" as any} asChild>
+          <TouchableOpacity style={styles.tabItemContainer}>
+            <Feather name="trello" size={24} color={pathname === '/mural' ? theme.colors.primary : theme.colors.textSecondary} />
+            <Text style={[styles.tabItem, pathname === '/mural' && { color: theme.colors.primary }]}>Mural</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href={"/(main)/calendario" as any} asChild>
+          <TouchableOpacity style={styles.tabItemContainer}>
+            <Feather name="calendar" size={24} color={pathname === '/calendario' ? theme.colors.primary : theme.colors.textSecondary} />
+            <Text style={[styles.tabItem, pathname === '/calendario' && { color: theme.colors.primary }]}>Agenda</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );
@@ -260,48 +317,150 @@ export default function MainLayout() {
 
 const styles = StyleSheet.create({
   // Desktop
-  desktopContainer: { flex: 1, flexDirection: 'row', backgroundColor: theme.colors.background },
-  sidebar: { width: 250, backgroundColor: theme.colors.surface, borderRightWidth: 1, borderColor: theme.colors.border, padding: theme.spacing.lg },
-  logo: { fontSize: theme.typography.sizes.headlineMd, fontWeight: 'bold', color: theme.colors.primary, marginBottom: theme.spacing.xxl },
-  navLink: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textPrimary, marginBottom: theme.spacing.md, fontWeight: '500' },
+  desktopContainer: { flex: 1, flexDirection: 'row', backgroundColor: '#F1F5F9' },
+  sidebar: { 
+    width: 260, 
+    backgroundColor: '#ffffff', 
+    borderRightWidth: 1, 
+    borderColor: '#E2E8F0', 
+    padding: theme.spacing.lg 
+  },
   
-  spaceSection: { marginTop: theme.spacing.xl },
-  sectionTitle: { fontSize: theme.typography.sizes.labelMd, textTransform: 'uppercase', color: theme.colors.textMuted, fontWeight: 'bold', marginBottom: theme.spacing.sm },
+  groupSwitcherBtn: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    padding: 12,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+    marginBottom: 8
+  },
+  groupIcon: {
+    width: 32, height: 32, borderRadius: 10, backgroundColor: theme.colors.primary, justifyContent: 'center', alignItems: 'center'
+  },
+  logo: { fontSize: 16, fontWeight: '800', color: '#1E293B' },
+  
+  groupDropdown: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  groupOption: {
+    padding: 12,
+    borderRadius: 10
+  },
+  
+  mainNav: {
+    marginBottom: 24,
+    gap: 4
+  },
+  navItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 12,
+    gap: 12
+  },
+  navItemActive: {
+    backgroundColor: '#FFF1F2',
+  },
+  navText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#64748B'
+  },
+  navTextActive: {
+    color: theme.colors.primary,
+    fontWeight: '800'
+  },
+  
+  spaceSection: { marginBottom: 24 },
+  sectionTitle: { fontSize: 12, color: '#94A3B8', fontWeight: '800', letterSpacing: 1, marginBottom: 12, paddingHorizontal: 12 },
+  
+  spaceLink: { 
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    padding: 10,
+    borderRadius: 12,
+    marginBottom: 2
+  },
+  spaceLinkActive: { 
+    backgroundColor: '#F1F5F9'
+  },
+  spaceLinkText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#64748B'
+  },
+  spaceLinkTextActive: {
+    color: '#0F172A',
+    fontWeight: '800'
+  },
+  
+  sidebarActionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    padding: 10,
+    borderRadius: 12,
+  },
+  sidebarActionText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.primary
+  },
+
   membersSection: {
-    paddingVertical: theme.spacing.md,
+    marginBottom: 24,
+    paddingTop: 24,
     borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: theme.colors.border,
-    marginBottom: theme.spacing.md,
-    marginTop: theme.spacing.md
+    borderColor: '#F1F5F9'
   },
   sidebarMemberItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderRadius: 12,
   },
   sidebarMemberName: {
-    fontSize: 13,
-    color: theme.colors.textPrimary,
-    fontWeight: '500'
+    fontSize: 14,
+    color: '#1E293B',
+    fontWeight: '700'
   },
   sidebarMemberRole: {
-    fontSize: 11,
-    color: theme.colors.textMuted
+    fontSize: 12,
+    color: '#94A3B8',
+    fontWeight: '500'
   },
-  spaceLink: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginBottom: theme.spacing.sm, paddingVertical: 4 },
-  spaceLinkActive: { color: theme.colors.primary, fontWeight: 'bold' },
-  createSpaceLink: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.primary, marginTop: theme.spacing.sm, fontWeight: '600' },
-  manageSpaceLink: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, marginTop: theme.spacing.sm, fontWeight: '600' },
+  
+  footerLinks: {
+    paddingTop: 24,
+    borderTopWidth: 1,
+    borderColor: '#F1F5F9',
+    gap: 4
+  },
 
   // Mobile
-  mobileContainer: { flex: 1, backgroundColor: theme.colors.background },
-  bottomTabs: { height: 70, flexDirection: 'row', backgroundColor: theme.colors.surface, borderTopWidth: 1, borderColor: theme.colors.border, alignItems: 'center', justifyContent: 'space-around', paddingBottom: 10 },
-  tabItem: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, fontWeight: '500', padding: 8 },
+  mobileContainer: { flex: 1, backgroundColor: '#F8FAFC' },
+  bottomTabs: { height: 75, flexDirection: 'row', backgroundColor: '#ffffff', borderTopWidth: 1, borderColor: '#F1F5F9', alignItems: 'center', justifyContent: 'space-around', paddingBottom: 16, paddingTop: 8 },
+  tabItemContainer: { alignItems: 'center', justifyContent: 'center', flex: 1, gap: 4 },
+  tabItem: { fontSize: 11, color: '#94A3B8', fontWeight: '700' },
   
   // Shared
   mainArea: { flex: 1 },
-  header: { height: 60, backgroundColor: theme.colors.surface, borderBottomWidth: 1, borderColor: theme.colors.border, justifyContent: 'center', paddingHorizontal: theme.spacing.lg },
-  headerTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '600', color: theme.colors.textPrimary },
+  header: { height: 70, backgroundColor: '#ffffff', borderBottomWidth: 1, borderColor: '#F1F5F9', justifyContent: 'center', paddingHorizontal: theme.spacing.lg },
+  headerTitle: { fontSize: 18, fontWeight: '800', color: '#0F172A' },
   content: { flex: 1 },
 });
