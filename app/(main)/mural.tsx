@@ -441,7 +441,10 @@ const styles = StyleSheet.create({
   },
   
   taskCard: { 
-    // Uses baseCard
+    backgroundColor: '#e8f5e9',
+    borderLeftWidth: 6,
+    borderLeftColor: '#4caf50',
+    borderColor: '#c8e6c9'
   },
   taskCardCompleted: { opacity: 0.5 },
   taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
@@ -459,16 +462,23 @@ const styles = StyleSheet.create({
   priority_low_text: { color: '#4338CA' },
   
   noticeCard: { 
-    backgroundColor: '#FFFBEB',
-    borderColor: '#FEF3C7'
+    backgroundColor: '#fff3e0',
+    borderLeftWidth: 6,
+    borderLeftColor: '#ff9800',
+    borderColor: '#ffe0b2'
   },
   noticeText: { fontSize: theme.typography.sizes.bodyLg, color: '#92400E', fontStyle: 'italic', lineHeight: 22 },
   
   eventCard: { 
-    flexDirection: 'row', alignItems: 'center'
+    backgroundColor: '#ffebee',
+    borderLeftWidth: 6,
+    borderLeftColor: '#f44336',
+    borderColor: '#ffcdd2',
+    flexDirection: 'row', 
+    alignItems: 'center'
   },
   eventLeft: { 
-    backgroundColor: '#FEE2E2',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     padding: theme.spacing.md,
     borderRadius: 16,
     marginRight: theme.spacing.md, 
@@ -480,14 +490,18 @@ const styles = StyleSheet.create({
   eventTimeText: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#991B1B' },
   
   listCard: { 
-    backgroundColor: '#F0FDF4',
-    borderColor: '#DCFCE7'
+    backgroundColor: '#e0f7fa',
+    borderLeftWidth: 6,
+    borderLeftColor: '#00bcd4',
+    borderColor: '#b2ebf2'
   },
   listTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#166534' },
   
   ideaCard: { 
-    backgroundColor: '#F8FAFC',
-    borderColor: '#E2E8F0'
+    backgroundColor: '#fffde7',
+    borderLeftWidth: 6,
+    borderLeftColor: '#ffeb3b',
+    borderColor: '#fff9c4'
   },
   ideaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#334155', marginBottom: theme.spacing.xs },
 
