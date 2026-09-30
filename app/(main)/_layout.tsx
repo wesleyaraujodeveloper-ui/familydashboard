@@ -59,6 +59,8 @@ export default function MainLayout() {
             <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.primary} />
           </TouchableOpacity>
           
+          <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+          
           {showGroupSwitcher && (
             <View style={{ marginBottom: 16, backgroundColor: '#f0f0f0', borderRadius: 8, padding: 8 }}>
               {groups.map(g => (
@@ -117,6 +119,9 @@ export default function MainLayout() {
           <Link href={"/(main)/historico" as any} style={styles.navLink}>Histórico</Link>
           <Link href={"/(main)/membros" as any} style={styles.navLink}>Membros</Link>
           <Link href={"/(main)/configuracoes" as any} style={styles.navLink}>Configurações</Link>
+          
+          <View style={{ height: 40 }} />
+          </ScrollView>
         </View>
 
         {/* ÁREA PRINCIPAL */}
