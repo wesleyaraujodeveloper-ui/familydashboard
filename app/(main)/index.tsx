@@ -321,25 +321,21 @@ export default function OverviewScreen() {
 
         </View>
 
-        {/* CTA BUBBLE */}
-        <TouchableOpacity style={styles.ctaContainer} onPress={() => router.push('/(main)/criar-tarefa')}>
-          <LinearGradient
-            colors={['#C084FC', '#DB2777']}
-            start={{x: 0, y: 0}} end={{x: 1, y: 1}}
-            style={styles.ctaGradient}
-          >
-            <View style={styles.ctaContent}>
-              <Text style={styles.ctaTitle}>Adicionar Tarefa</Text>
-              <Text style={styles.ctaSubtitle}>Mantenha a casa organizada hoje!</Text>
-            </View>
-            <View style={styles.ctaIcon}>
-              <Feather name="plus" size={24} color="#FFF" />
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-
-        <View style={{ height: 100 }} />
       </ScrollView>
+
+      {/* FLOATING ACTION BUTTON */}
+      <TouchableOpacity 
+        style={styles.floatingButtonTopRight} 
+        onPress={() => router.push('/(main)/criar-tarefa')}
+      >
+        <LinearGradient
+          colors={['#C084FC', '#DB2777']}
+          start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+          style={styles.fabGradient}
+        >
+          <Feather name="plus" size={24} color="#FFF" />
+        </LinearGradient>
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
@@ -621,5 +617,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 16
+  },
+  floatingButtonTopRight: {
+    position: 'absolute',
+    top: 90,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    shadowColor: '#DB2777',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 8,
+    zIndex: 100,
+  },
+  fabGradient: {
+    flex: 1,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
