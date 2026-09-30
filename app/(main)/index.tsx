@@ -192,10 +192,7 @@ export default function OverviewScreen() {
                 {activeGroup?.id === group.id && <Feather name="check" size={16} color={theme.colors.primary} />}
               </TouchableOpacity>
             ))}
-            <TouchableOpacity style={[styles.expandedActionBtn, { borderColor: '#F59E0B' }]} onPress={() => router.push('/(onboarding)/create-group' as any)}>
-              <Feather name="plus" size={16} color="#D97706" />
-              <Text style={[styles.expandedActionText, { color: '#D97706' }]}>Criar ou Entrar em novo Grupo</Text>
-            </TouchableOpacity>
+
           </View>
         )}
 
@@ -217,10 +214,7 @@ export default function OverviewScreen() {
                 {activeSpace?.id === space.id && <Feather name="check" size={16} color={theme.colors.secondary} />}
               </TouchableOpacity>
             ))}
-            <TouchableOpacity style={[styles.expandedActionBtn, { borderColor: '#10B981' }]} onPress={() => router.push('/(main)/criar-espaco' as any)}>
-              <Feather name="plus" size={16} color="#16A34A" />
-              <Text style={[styles.expandedActionText, { color: '#16A34A' }]}>Novo Espaço</Text>
-            </TouchableOpacity>
+
           </View>
         )}
 
