@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { theme } from '../../src/theme';
-import { Card } from '../../src/components/ui/Card';
 import { Avatar } from '../../src/components/ui/Avatar';
-import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { Feather, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '../../src/store/auth';
 import { useGroup } from '../../src/store/group';
 import { useSpace } from '../../src/store/space';
@@ -97,10 +96,6 @@ export default function OverviewScreen() {
     return 'Boa noite';
   };
 
-  const getGreetingSub = () => {
-    return 'Acompanhe tarefas coletivas e recados carinhosos num só lugar.';
-  };
-
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -112,152 +107,195 @@ export default function OverviewScreen() {
   const firstName = profile?.name ? profile.name.split(' ')[0] : 'Usuário';
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      
-      {/* HEADER DE BOAS VINDAS */}
-      <View style={styles.header}>
-        <View style={styles.headerTextContainer}>
-          <View style={styles.badge}>
-            <View style={styles.dot} />
-            <Text style={styles.badgeText}>Lar em sintonia</Text>
-          </View>
-          <Text style={styles.greeting}>{getGreeting()}, {firstName}!</Text>
-          <Text style={styles.subGreeting}>{getGreetingSub()}</Text>
-        </View>
-        <Avatar name={profile?.name} url={profile?.avatar_url} size="lg" />
-      </View>
-
-      {/* METRICAS GRID */}
-      <View style={styles.grid}>
+    <LinearGradient colors={['#FCE7F3', '#E0E7FF', '#E0F2FE']} style={styles.mainContainer}>
+      <ScrollView style={styles.scrollArea} showsVerticalScrollIndicator={false}>
         
-        {/* Metric 1: Tarefas de Hoje */}
-        <Card style={styles.metricCard} elevation="level1">
-          <View style={styles.metricHeader}>
-            <View style={[styles.iconBox, { backgroundColor: '#fee2e2' }]}>
-              <Feather name="check-circle" size={20} color="#ef4444" />
+        {/* HEADER DE BOAS VINDAS */}
+        <View style={styles.header}>
+          <View style={styles.headerTextContainer}>
+            <View style={styles.badge}>
+              <View style={styles.dot} />
+              <Text style={styles.badgeText}>Lar & Equipe</Text>
             </View>
-            <View style={styles.pill}>
-              <Text style={styles.pillText}>{tasksToday.done} concluídas</Text>
-            </View>
+            <Text style={styles.greeting}>{getGreeting()}, {firstName}! ✨</Text>
+            <Text style={styles.subGreeting}>Vamos organizar o dia da família juntos.</Text>
           </View>
-          <View style={styles.metricBody}>
-            <View style={styles.valRow}>
-              <Text style={styles.valNum}>{tasksToday.total}</Text>
+          <View style={styles.avatarWrapper}>
+            <Avatar name={profile?.name} url={profile?.avatar_url} size="lg" />
+            <View style={styles.notificationDot} />
+          </View>
+        </View>
+
+        {/* QUICK ACTIONS */}
+        <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+        <View style={styles.quickActionsContainer}>
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/mural')}>
+            <View style={[styles.quickActionIcon, { backgroundColor: '#DBEAFE' }]}>
+              <Feather name="layout" size={24} color="#3B82F6" />
+            </View>
+            <Text style={styles.quickActionLabel}>Mural</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/meu-dia')}>
+            <View style={[styles.quickActionIcon, { backgroundColor: '#FCE7F3' }]}>
+              <Feather name="sun" size={24} color="#EC4899" />
+            </View>
+            <Text style={styles.quickActionLabel}>Meu Dia</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/listas')}>
+            <View style={[styles.quickActionIcon, { backgroundColor: '#FEF3C7' }]}>
+              <Feather name="check-square" size={24} color="#D97706" />
+            </View>
+            <Text style={styles.quickActionLabel}>Listas</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/calendario')}>
+            <View style={[styles.quickActionIcon, { backgroundColor: '#DCFCE7' }]}>
+              <Feather name="calendar" size={24} color="#16A34A" />
+            </View>
+            <Text style={styles.quickActionLabel}>Agenda</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* METRICAS GRID */}
+        <Text style={styles.sectionTitle}>Resumo do Lar</Text>
+        <View style={styles.grid}>
+          
+          {/* Metric 1: Tarefas de Hoje */}
+          <View style={styles.metricCard}>
+            <View style={styles.metricHeader}>
+              <View style={[styles.iconBox, { backgroundColor: '#FEE2E2' }]}>
+                <Feather name="check-circle" size={20} color="#EF4444" />
+              </View>
+              <View style={[styles.pill, { backgroundColor: '#FEE2E2' }]}>
+                <Text style={[styles.pillText, { color: '#B91C1C' }]}>{tasksToday.progress.toFixed(0)}% Feito</Text>
+              </View>
+            </View>
+            <View style={styles.metricBody}>
+              <View style={styles.valRow}>
+                <Text style={styles.valNum}>{tasksToday.done}/{tasksToday.total}</Text>
+              </View>
               <Text style={styles.valLabel}>tarefas hoje</Text>
-            </View>
-            <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: `${tasksToday.progress}%` }]} />
-            </View>
-            <View style={styles.progressRow}>
-              <Text style={styles.progressLabel}>Meta do dia</Text>
-              <Text style={styles.progressVal}>{tasksToday.progress.toFixed(0)}% feito</Text>
+              <View style={styles.progressTrack}>
+                <LinearGradient
+                  colors={['#FCA5A5', '#EF4444']}
+                  start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                  style={[styles.progressFill, { width: `${tasksToday.progress}%` }]}
+                />
+              </View>
             </View>
           </View>
-        </Card>
 
-        {/* Metric 2: Compromissos */}
-        <Card style={styles.metricCard} elevation="level1">
-          <View style={styles.metricHeader}>
-            <View style={[styles.iconBox, { backgroundColor: '#e0e7ff' }]}>
-              <Feather name="calendar" size={20} color={theme.colors.primary} />
+          {/* Metric 2: Compromissos */}
+          <View style={styles.metricCard}>
+            <View style={styles.metricHeader}>
+              <View style={[styles.iconBox, { backgroundColor: '#E0E7FF' }]}>
+                <Feather name="clock" size={20} color="#6366F1" />
+              </View>
+              <View style={[styles.pill, { backgroundColor: '#E0E7FF' }]}>
+                <Text style={[styles.pillText, { color: '#4338CA' }]}>Eventos</Text>
+              </View>
             </View>
-            <View style={[styles.pill, { backgroundColor: '#f1f5f9' }]}>
-              <Text style={[styles.pillText, { color: '#64748b' }]}>Hoje/Breve</Text>
-            </View>
-          </View>
-          <View style={styles.metricBody}>
-            <View style={styles.valRow}>
-              <Text style={styles.valNum}>{upcomingEvents.length}</Text>
-              <Text style={styles.valLabel}>compromissos</Text>
-            </View>
-            {upcomingEvents.length > 0 ? (
-              <Text style={styles.infoText} numberOfLines={1}>
-                Próximo: <Text style={{fontWeight:'bold'}}>{upcomingEvents[0].title}</Text>
-              </Text>
-            ) : (
-              <Text style={styles.infoText}>Nenhum evento agendado</Text>
-            )}
-            <View style={styles.progressRow}>
-              <Text style={styles.progressLabel}>Cheque seu calendário</Text>
+            <View style={styles.metricBody}>
+              <View style={styles.valRow}>
+                <Text style={styles.valNum}>{upcomingEvents.length}</Text>
+              </View>
+              <Text style={styles.valLabel}>hoje & breve</Text>
+              {upcomingEvents.length > 0 ? (
+                <Text style={styles.infoText} numberOfLines={1}>
+                  {upcomingEvents[0].title}
+                </Text>
+              ) : (
+                <Text style={styles.infoText}>Agenda livre!</Text>
+              )}
             </View>
           </View>
-        </Card>
 
-        {/* Metric 3: Tarefa Atrasada */}
-        <Card style={styles.metricCard} elevation="level1">
-          <View style={styles.metricHeader}>
-            <View style={[styles.iconBox, { backgroundColor: '#ffedd5' }]}>
-              <Feather name="alert-triangle" size={20} color="#f97316" />
+          {/* Metric 3: Recados */}
+          <View style={styles.metricCard}>
+            <View style={styles.metricHeader}>
+              <View style={[styles.iconBox, { backgroundColor: '#FDF4FF' }]}>
+                <Feather name="heart" size={20} color="#D946EF" />
+              </View>
+              <View style={[styles.pill, { backgroundColor: '#FDF4FF' }]}>
+                <Text style={[styles.pillText, { color: '#A21CAF' }]}>Mural</Text>
+              </View>
             </View>
-            <View style={[styles.pill, { backgroundColor: '#ffedd5' }]}>
-              <Text style={[styles.pillText, { color: '#c2410c' }]}>Atenção</Text>
-            </View>
-          </View>
-          <View style={styles.metricBody}>
-            <View style={styles.valRow}>
-              <Text style={[styles.valNum, { color: '#f97316' }]}>{overdueTasks.length}</Text>
-              <Text style={styles.valLabel}>tarefa atrasada</Text>
-            </View>
-            {overdueTasks.length > 0 ? (
-              <Text style={[styles.infoText, { color: '#c2410c', fontWeight: 'bold' }]} numberOfLines={1}>
-                {overdueTasks[0].title}
-              </Text>
-            ) : (
-              <Text style={styles.infoText}>Tudo em dia!</Text>
-            )}
-            <View style={styles.progressRow}>
-              <Text style={styles.progressLabel}>Requer ação</Text>
-              {overdueTasks.length > 0 && <Text style={[styles.progressVal, { color: theme.colors.primary }]}>Ver</Text>}
+            <View style={styles.metricBody}>
+              <View style={styles.valRow}>
+                <Text style={styles.valNum}>{recentNotices.length}</Text>
+              </View>
+              <Text style={styles.valLabel}>novos recados</Text>
+              {recentNotices.length > 0 ? (
+                <Text style={styles.infoText} numberOfLines={1}>
+                  "{recentNotices[0].text}"
+                </Text>
+              ) : (
+                <Text style={styles.infoText}>Nenhuma novidade.</Text>
+              )}
             </View>
           </View>
-        </Card>
 
-        {/* Metric 4: Recados */}
-        <Card style={styles.metricCard} elevation="level1">
-          <View style={styles.metricHeader}>
-            <View style={[styles.iconBox, { backgroundColor: '#fdf4ff' }]}>
-              <Feather name="message-square" size={20} color="#d946ef" />
+          {/* Metric 4: Atrasadas */}
+          <View style={styles.metricCard}>
+            <View style={styles.metricHeader}>
+              <View style={[styles.iconBox, { backgroundColor: '#FFEDD5' }]}>
+                <Feather name="alert-circle" size={20} color="#F97316" />
+              </View>
+              <View style={[styles.pill, { backgroundColor: '#FFEDD5' }]}>
+                <Text style={[styles.pillText, { color: '#C2410C' }]}>Atenção</Text>
+              </View>
             </View>
-            <View style={[styles.pill, { backgroundColor: '#fdf4ff' }]}>
-              <Text style={[styles.pillText, { color: '#a21caf' }]}>Recentes</Text>
-            </View>
-          </View>
-          <View style={styles.metricBody}>
-            <View style={styles.valRow}>
-              <Text style={styles.valNum}>{recentNotices.length}</Text>
-              <Text style={styles.valLabel}>recados novos</Text>
-            </View>
-            {recentNotices.length > 0 ? (
-              <Text style={styles.infoText} numberOfLines={1}>
-                "{recentNotices[0].text}"
-              </Text>
-            ) : (
-              <Text style={styles.infoText}>Mural de recados limpo</Text>
-            )}
-            <View style={styles.progressRow}>
-              <Text style={styles.progressLabel}>
-                {recentNotices.length > 0 ? `Por ${recentNotices[0].profiles?.name.split(' ')[0]}` : ''}
-              </Text>
-              <Text style={[styles.progressVal, { color: theme.colors.primary }]}>Ver mural</Text>
+            <View style={styles.metricBody}>
+              <View style={styles.valRow}>
+                <Text style={styles.valNum}>{overdueTasks.length}</Text>
+              </View>
+              <Text style={styles.valLabel}>tarefas atrasadas</Text>
+              {overdueTasks.length > 0 ? (
+                <Text style={[styles.infoText, { color: '#C2410C' }]} numberOfLines={1}>
+                  {overdueTasks[0].title}
+                </Text>
+              ) : (
+                <Text style={styles.infoText}>Tudo em dia!</Text>
+              )}
             </View>
           </View>
-        </Card>
 
-      </View>
-      
-      <View style={{ height: 60 }} />
-    </ScrollView>
+        </View>
+
+        {/* CTA BUBBLE */}
+        <TouchableOpacity style={styles.ctaContainer} onPress={() => router.push('/(main)/criar-tarefa')}>
+          <LinearGradient
+            colors={['#C084FC', '#DB2777']}
+            start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+            style={styles.ctaGradient}
+          >
+            <View style={styles.ctaContent}>
+              <Text style={styles.ctaTitle}>Adicionar Tarefa</Text>
+              <Text style={styles.ctaSubtitle}>Mantenha a casa organizada hoje!</Text>
+            </View>
+            <View style={styles.ctaIcon}>
+              <Feather name="plus" size={24} color="#FFF" />
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <View style={{ height: 100 }} />
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fafc', padding: theme.spacing.lg },
+  mainContainer: { flex: 1 },
+  scrollArea: { flex: 1, padding: theme.spacing.lg },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: theme.spacing.xl,
-    paddingTop: theme.spacing.md
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 30,
   },
   headerTextContainer: {
     flex: 1,
@@ -266,123 +304,213 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#dbeafe',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
     alignSelf: 'flex-start',
-    marginBottom: 8
+    marginBottom: 12
   },
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#3b82f6',
-    marginRight: 6
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#EC4899',
+    marginRight: 8
   },
   badgeText: {
     fontSize: 12,
-    color: '#1e40af',
-    fontWeight: 'bold'
+    color: '#831843',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5
   },
   greeting: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#0f172a',
+    fontSize: 34,
+    fontWeight: '900',
+    color: '#1E1B4B',
     letterSpacing: -1,
-    marginBottom: 8
+    marginBottom: 6
   },
   subGreeting: {
     fontSize: 16,
-    color: '#64748b',
-    lineHeight: 24
+    color: '#4F46E5',
+    opacity: 0.8,
+    lineHeight: 22,
+    fontWeight: '500'
+  },
+  avatarWrapper: {
+    position: 'relative',
+    padding: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    borderRadius: 99
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 14,
+    height: 14,
+    backgroundColor: '#EF4444',
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#FCE7F3'
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#1E1B4B',
+    marginBottom: 16,
+    marginLeft: 4
+  },
+  quickActionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 32,
+    paddingHorizontal: 4
+  },
+  quickActionBox: {
+    alignItems: 'center',
+    width: '22%'
+  },
+  quickActionIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+    backgroundColor: '#FFF',
+    shadowColor: '#6366F1',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 3,
+  },
+  quickActionLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#4338CA'
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: -8
+    marginHorizontal: -8,
+    marginBottom: 20
   },
   metricCard: {
     width: '45%',
-    minWidth: 280,
+    minWidth: 150,
     flexGrow: 1,
     margin: 8,
-    padding: theme.spacing.lg,
-    justifyContent: 'space-between'
+    padding: 20,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.9)',
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.05,
+    shadowRadius: 20,
+    elevation: 2,
   },
   metricHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 16
   },
   iconBox: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: 44,
+    height: 44,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center'
   },
   pill: {
-    backgroundColor: '#dbeafe',
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: 12
   },
   pillText: {
     fontSize: 12,
-    fontWeight: 'bold',
-    color: '#1d4ed8'
+    fontWeight: '800',
   },
   metricBody: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'flex-end'
   },
   valRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: 8
+    marginBottom: 4
   },
   valNum: {
     fontSize: 32,
-    fontWeight: '800',
-    color: '#0f172a',
-    marginRight: 8
+    fontWeight: '900',
+    color: '#1E1B4B',
   },
   valLabel: {
-    fontSize: 14,
-    color: '#64748b',
-    fontWeight: '500'
+    fontSize: 13,
+    color: '#6366F1',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 8
   },
   infoText: {
     fontSize: 14,
     color: '#475569',
-    marginBottom: 8
+    fontWeight: '500'
   },
   progressTrack: {
-    height: 6,
-    backgroundColor: '#e2e8f0',
-    borderRadius: 3,
+    height: 8,
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderRadius: 4,
     overflow: 'hidden',
-    marginBottom: 8
+    marginTop: 8
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#3b82f6',
-    borderRadius: 3
+    borderRadius: 4
   },
-  progressRow: {
+  ctaContainer: {
+    marginVertical: 16,
+    marginHorizontal: 4,
+    shadowColor: '#DB2777',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
+    elevation: 8,
+  },
+  ctaGradient: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 'auto',
-    paddingTop: 8
+    alignItems: 'center',
+    padding: 24,
+    borderRadius: 32,
+    justifyContent: 'space-between'
   },
-  progressLabel: {
-    fontSize: 12,
-    color: '#94a3b8'
+  ctaContent: {
+    flex: 1
   },
-  progressVal: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#3b82f6'
+  ctaTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: '#FFF',
+    marginBottom: 6
+  },
+  ctaSubtitle: {
+    fontSize: 15,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500'
+  },
+  ctaIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 16
   }
 });

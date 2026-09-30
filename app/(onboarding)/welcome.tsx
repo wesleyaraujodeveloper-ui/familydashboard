@@ -67,7 +67,7 @@ export default function WelcomeScreen() {
             <View style={styles.actionRow}>
               <TouchableOpacity 
                 style={styles.primaryButton}
-                onPress={() => router.push('/(onboarding)/group-type' as any)}
+                onPress={() => router.push('/(auth)/register' as any)}
                 activeOpacity={0.8}
               >
                 <Text style={styles.primaryButtonText}>Começar</Text>
@@ -94,7 +94,7 @@ export default function WelcomeScreen() {
                   <View style={[styles.dot, { backgroundColor: '#fb7185' }]} />
                   <View style={[styles.dot, { backgroundColor: '#fbbf24' }]} />
                   <View style={[styles.dot, { backgroundColor: '#34d399' }]} />
-                  <Text style={styles.glassTitle}>Mural da Casa • Família Mariz</Text>
+                  <Text style={styles.glassTitle}>Mural da Casa • Família Silva</Text>
                 </View>
                 <View style={styles.avatarGroup}>
                   <View style={[styles.miniAvatar, { backgroundColor: '#ffd3c7', zIndex: 3 }]}><Text style={styles.miniAvatarText}>E</Text></View>

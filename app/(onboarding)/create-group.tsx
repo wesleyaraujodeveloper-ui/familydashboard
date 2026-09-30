@@ -105,7 +105,7 @@ export default function CreateGroupScreen() {
         <Card elevation="level1">
           <Input 
             label="Nome do Grupo" 
-            placeholder="Ex: Família Mariz" 
+            placeholder="Ex: Família Silva" 
             value={name} 
             onChangeText={setName} 
           />
