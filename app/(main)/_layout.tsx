@@ -69,7 +69,7 @@ export default function MainLayout() {
                 </TouchableOpacity>
               ))}
               <TouchableOpacity onPress={() => { setShowGroupSwitcher(false); router.push('/(onboarding)/create-group' as any); }} style={{ paddingVertical: 8 }}>
-                <Text style={{ color: theme.colors.primary }}>+ Criar novo grupo</Text>
+                <Text style={{ color: theme.colors.primary }}>+ Entrar ou Criar Grupo</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -171,7 +171,7 @@ export default function MainLayout() {
                   </TouchableOpacity>
                 ))}
                 <TouchableOpacity onPress={() => { setShowGroupSwitcher(false); setMobileMenuOpen(false); router.push('/(onboarding)/create-group' as any); }} style={{ paddingVertical: 8 }}>
-                  <Text style={{ color: theme.colors.primary }}>+ Criar novo grupo</Text>
+                  <Text style={{ color: theme.colors.primary }}>+ Entrar ou Criar Grupo</Text>
                 </TouchableOpacity>
               </View>
             )}
