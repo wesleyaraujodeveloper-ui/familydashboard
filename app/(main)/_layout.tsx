@@ -10,21 +10,17 @@ import { supabase } from '../../src/services/supabase';
 import { Avatar } from '../../src/components/ui/Avatar';
 
 const SidebarLink = ({ href, icon, label, isActive, onPress }: any) => {
-  if (onPress) {
-    return (
-      <TouchableOpacity onPress={onPress} style={[styles.navItem, isActive && styles.navItemActive]}>
-        <Feather name={icon as any} size={20} color={isActive ? theme.colors.primary : theme.colors.textSecondary} />
-        <Text style={[styles.navText, isActive && styles.navTextActive]}>{label}</Text>
-      </TouchableOpacity>
-    );
-  }
+  const router = useRouter();
+  const handlePress = () => {
+    if (onPress) onPress();
+    else router.push(href);
+  };
+  
   return (
-    <Link href={href} asChild>
-      <TouchableOpacity style={[styles.navItem, isActive && styles.navItemActive]}>
-        <Feather name={icon as any} size={20} color={isActive ? theme.colors.primary : theme.colors.textSecondary} />
-        <Text style={[styles.navText, isActive && styles.navTextActive]}>{label}</Text>
-      </TouchableOpacity>
-    </Link>
+    <TouchableOpacity onPress={handlePress} style={[styles.navItem, isActive && styles.navItemActive]}>
+      <Feather name={icon as any} size={20} color={isActive ? theme.colors.primary : theme.colors.textSecondary} />
+      <Text style={[styles.navText, isActive ? styles.navTextActive : null]}>{label}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -286,30 +282,22 @@ export default function MainLayout() {
 
       {/* BOTTOM TABS MOBILE */}
       <View style={styles.bottomTabs}>
-        <Link href={"/(main)" as any} asChild>
-          <TouchableOpacity style={styles.tabItemContainer}>
-            <Feather name="home" size={24} color={pathname === '/' ? theme.colors.primary : theme.colors.textSecondary} />
-            <Text style={[styles.tabItem, pathname === '/' && { color: theme.colors.primary }]}>Início</Text>
-          </TouchableOpacity>
-        </Link>
-        <Link href={"/(main)/meu-dia" as any} asChild>
-          <TouchableOpacity style={styles.tabItemContainer}>
-            <Feather name="sun" size={24} color={pathname === '/meu-dia' ? theme.colors.primary : theme.colors.textSecondary} />
-            <Text style={[styles.tabItem, pathname === '/meu-dia' && { color: theme.colors.primary }]}>Meu Dia</Text>
-          </TouchableOpacity>
-        </Link>
-        <Link href={"/(main)/mural" as any} asChild>
-          <TouchableOpacity style={styles.tabItemContainer}>
-            <Feather name="trello" size={24} color={pathname === '/mural' ? theme.colors.primary : theme.colors.textSecondary} />
-            <Text style={[styles.tabItem, pathname === '/mural' && { color: theme.colors.primary }]}>Mural</Text>
-          </TouchableOpacity>
-        </Link>
-        <Link href={"/(main)/calendario" as any} asChild>
-          <TouchableOpacity style={styles.tabItemContainer}>
-            <Feather name="calendar" size={24} color={pathname === '/calendario' ? theme.colors.primary : theme.colors.textSecondary} />
-            <Text style={[styles.tabItem, pathname === '/calendario' && { color: theme.colors.primary }]}>Agenda</Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity onPress={() => router.push('/(main)' as any)} style={styles.tabItemContainer}>
+          <Feather name="home" size={24} color={pathname === '/' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabItem, pathname === '/' ? { color: theme.colors.primary } : null]}>Início</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(main)/meu-dia' as any)} style={styles.tabItemContainer}>
+          <Feather name="sun" size={24} color={pathname === '/meu-dia' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabItem, pathname === '/meu-dia' ? { color: theme.colors.primary } : null]}>Meu Dia</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(main)/mural' as any)} style={styles.tabItemContainer}>
+          <Feather name="trello" size={24} color={pathname === '/mural' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabItem, pathname === '/mural' ? { color: theme.colors.primary } : null]}>Mural</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(main)/calendario' as any)} style={styles.tabItemContainer}>
+          <Feather name="calendar" size={24} color={pathname === '/calendario' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabItem, pathname === '/calendario' ? { color: theme.colors.primary } : null]}>Agenda</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
