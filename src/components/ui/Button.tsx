@@ -6,9 +6,10 @@ interface ButtonProps extends TouchableOpacityProps {
   title: string;
   variant?: 'primary' | 'secondary' | 'ghost';
   isLoading?: boolean;
+  icon?: React.ReactNode;
 }
 
-export const Button = ({ title, variant = 'primary', isLoading, style, ...props }: ButtonProps) => {
+export const Button = ({ title, variant = 'primary', isLoading, icon, style, ...props }: ButtonProps) => {
   const getContainerStyle = () => {
     switch (variant) {
       case 'secondary':
@@ -43,7 +44,10 @@ export const Button = ({ title, variant = 'primary', isLoading, style, ...props 
       {isLoading ? (
         <ActivityIndicator color={variant === 'primary' ? theme.colors.surface : theme.colors.primary} />
       ) : (
-        <Text style={[styles.text, getTextStyle()]}>{title}</Text>
+        <>
+          {icon}
+          <Text style={[styles.text, getTextStyle()]}>{title}</Text>
+        </>
       )}
     </TouchableOpacity>
   );
