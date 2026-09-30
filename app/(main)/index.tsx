@@ -200,7 +200,7 @@ export default function OverviewScreen() {
                 onPress={() => {
                   setActiveSpace(space);
                   setExpandedSection(null);
-                  router.push(`/(main)/spaces/${space.id}` as any);
+                  router.push('/(main)/mural' as any);
                 }}
               >
                 <Feather name="hash" size={16} color={activeSpace?.id === space.id ? theme.colors.secondary : theme.colors.textSecondary} />
