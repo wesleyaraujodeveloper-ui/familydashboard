@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Feather } from '@expo/vector-icons';
 import { theme } from '../../src/theme';
 import { Card } from '../../src/components/ui/Card';
 import { useSpace } from '../../src/store/space';
@@ -98,23 +100,43 @@ export default function CalendarioScreen() {
     }, [fetchCalendar])
   );
 
-  // Derivar marcadores no calendário
+  // Derivar marcadores no calendário com customStyles para o visual ZenZ (fundo redondo colorido)
   const markedDates: any = {};
   items.forEach(item => {
-    let dotColor = theme.colors.primary;
-    if (item.type === 'event') dotColor = theme.colors.secondary;
-    if (item.type === 'notice') dotColor = theme.colors.tertiary;
-    if (item.type === 'idea') dotColor = theme.colors.warning;
+    let bgColor = '#10B981'; // Default (green)
+    if (item.type === 'event') bgColor = '#EF4444'; // Red
+    if (item.type === 'notice') bgColor = '#F59E0B'; // Orange
+    if (item.type === 'idea') bgColor = '#EAB308'; // Yellow
+    if (item.type === 'list') bgColor = '#3B82F6'; // Blue
     
+    // Se a data já existe e é a selecionada, mantemos a borda/destaque especial
     markedDates[item.date_iso] = { 
-      marked: true, 
-      dotColor,
-      ...(item.date_iso === selectedDate ? { selected: true, selectedColor: theme.colors.primary } : {})
+      customStyles: {
+        container: {
+          backgroundColor: item.date_iso === selectedDate ? theme.colors.primary : bgColor,
+          borderRadius: 20,
+          elevation: item.date_iso === selectedDate ? 4 : 2,
+          shadowColor: item.date_iso === selectedDate ? theme.colors.primary : bgColor,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 6,
+          transform: [{ scale: item.date_iso === selectedDate ? 1.1 : 1 }]
+        },
+        text: {
+          color: '#ffffff',
+          fontWeight: 'bold'
+        }
+      }
     };
   });
   
   if (!markedDates[selectedDate]) {
-    markedDates[selectedDate] = { selected: true, selectedColor: theme.colors.primary };
+    markedDates[selectedDate] = { 
+      customStyles: {
+        container: { backgroundColor: theme.colors.primary, borderRadius: 20 },
+        text: { color: '#ffffff', fontWeight: 'bold' }
+      }
+    };
   }
 
   const selectedItems = items.filter(i => i.date_iso === selectedDate);
@@ -127,13 +149,15 @@ export default function CalendarioScreen() {
   const renderItem = (item: CalendarItem) => {
     if (item.type === 'event') {
       return (
-        <Card elevation="level1" style={styles.eventCard} key={'event' + item.id}>
-          <View style={styles.eventLeft}>
-            <Text style={styles.eventTimeText}>{item.time_formatted}</Text>
-          </View>
-          <View style={styles.itemRight}>
-            <Text style={styles.itemTitle}>📅 {item.title}</Text>
-            <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+        <Card elevation="none" style={[styles.baseCard, { padding: theme.spacing.md }]} key={'event' + item.id}>
+          <View style={[styles.eventCard, { padding: 0, marginBottom: 0 }]}>
+            <View style={styles.eventLeft}>
+              <Text style={styles.eventTimeText}>{item.time_formatted}</Text>
+            </View>
+            <View style={styles.itemRight}>
+              <Text style={styles.itemTitle}>📅 {item.title}</Text>
+              <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+            </View>
           </View>
         </Card>
       );
@@ -142,12 +166,12 @@ export default function CalendarioScreen() {
     if (item.type === 'task') {
       return (
         <TouchableOpacity key={'task' + item.id} onPress={() => router.push(`/(main)/tarefa/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={[styles.taskCard, item.status === 'done' && { opacity: 0.5 }]}>
+          <Card elevation="none" style={[styles.baseCard, item.status === 'done' && { opacity: 0.5 }]}>
             <View style={styles.taskHeader}>
               <Text style={[styles.itemTitle, item.status === 'done' && { textDecorationLine: 'line-through' }]}>✅ {item.title}</Text>
               {item.priority && (
                 <View style={[styles.badge, styles[`priority_${item.priority}` as keyof typeof styles]]}>
-                  <Text style={styles.badgeText}>{item.priority}</Text>
+                  <Text style={[styles.badgeText, styles[`priority_${item.priority}_text` as keyof typeof styles]]}>{item.priority}</Text>
                 </View>
               )}
             </View>
@@ -159,7 +183,7 @@ export default function CalendarioScreen() {
 
     if (item.type === 'notice') {
       return (
-        <Card elevation="level1" style={styles.noticeCard} key={'notice' + item.id}>
+        <Card elevation="none" style={styles.baseCard} key={'notice' + item.id}>
           <Text style={styles.itemTitle}>📌 {item.title}</Text>
           <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
         </Card>
@@ -169,7 +193,7 @@ export default function CalendarioScreen() {
     if (item.type === 'list') {
       return (
         <TouchableOpacity key={'list' + item.id} onPress={() => router.push(`/(main)/lista/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="level1" style={styles.listCard}>
+          <Card elevation="none" style={styles.baseCard}>
             <Text style={styles.itemTitle}>📋 {item.title}</Text>
             <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
           </Card>
@@ -179,7 +203,7 @@ export default function CalendarioScreen() {
 
     if (item.type === 'idea') {
       return (
-        <Card elevation="level1" style={styles.ideaCard} key={'idea' + item.id}>
+        <Card elevation="none" style={styles.baseCard} key={'idea' + item.id}>
           <Text style={styles.itemTitle}>💡 {item.title}</Text>
           <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
         </Card>
@@ -188,7 +212,7 @@ export default function CalendarioScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#FCA5A5', theme.colors.primary]} style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>📅 Calendário</Text>
         <Text style={styles.subtitle}>Visão geral dos seus compromissos e prazos</Text>
@@ -197,82 +221,114 @@ export default function CalendarioScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.calendarContainer}>
           <Calendar
+            markingType="custom"
             current={selectedDate}
             onDayPress={(day: any) => setSelectedDate(day.dateString)}
             markedDates={markedDates}
             theme={{
-              backgroundColor: theme.colors.surface,
-              calendarBackground: theme.colors.surface,
-              textSectionTitleColor: theme.colors.textSecondary,
+              backgroundColor: '#ffffff',
+              calendarBackground: '#ffffff',
+              textSectionTitleColor: '#9CA3AF',
               selectedDayBackgroundColor: theme.colors.primary,
               selectedDayTextColor: '#ffffff',
               todayTextColor: theme.colors.primary,
               dayTextColor: theme.colors.textPrimary,
-              textDisabledColor: theme.colors.textMuted,
-              dotColor: theme.colors.primary,
-              selectedDotColor: '#ffffff',
+              textDisabledColor: '#D1D5DB',
               arrowColor: theme.colors.primary,
               monthTextColor: theme.colors.textPrimary,
-              textDayFontWeight: '500',
-              textMonthFontWeight: 'bold',
+              textDayFontWeight: '600',
+              textMonthFontWeight: '900',
               textDayHeaderFontWeight: 'bold',
               textDayFontSize: 16,
-              textMonthFontSize: 18,
+              textMonthFontSize: 20,
             }}
           />
         </View>
 
         <View style={styles.agendaContainer}>
-          <Text style={styles.agendaTitle}>Agenda do Dia ({selectedDate.split('-').reverse().join('/')})</Text>
+          <Text style={styles.agendaTitle}>Agenda ({selectedDate.split('-').reverse().join('/')})</Text>
           
           {loading ? (
-             <ActivityIndicator size="small" color={theme.colors.primary} style={{marginTop: 20}} />
+             <ActivityIndicator size="small" color="#ffffff" style={{marginTop: 20}} />
           ) : selectedItems.length === 0 ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>Nenhum item agendado para este dia.</Text>
+              <Text style={styles.emptyStateText}>Nenhum item agendado.</Text>
             </View>
           ) : (
             selectedItems.map(renderItem)
           )}
         </View>
       </ScrollView>
-    </View>
+
+      <TouchableOpacity style={styles.fab} onPress={() => router.push('/(main)/criar-compromisso' as any)}>
+        <Feather name="plus" size={28} color="#ffffff" />
+      </TouchableOpacity>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.background },
-  header: { padding: theme.spacing.lg, paddingBottom: 0 },
-  title: { fontSize: theme.typography.sizes.displaySm, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.xs },
-  subtitle: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, marginBottom: theme.spacing.lg },
+  container: { flex: 1 },
+  header: { padding: theme.spacing.lg, paddingBottom: 0, paddingTop: theme.spacing.xl },
+  title: { fontSize: 32, fontWeight: '900', color: '#ffffff', marginBottom: theme.spacing.xs, textShadowColor: 'rgba(0,0,0,0.1)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 },
+  subtitle: { fontSize: theme.typography.sizes.bodyLg, color: 'rgba(255,255,255,0.9)', marginBottom: theme.spacing.lg },
   
-  calendarContainer: { marginHorizontal: theme.spacing.lg, borderRadius: theme.radius.lg, overflow: 'hidden', elevation: 2, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 8, backgroundColor: theme.colors.surface, marginBottom: theme.spacing.xl },
+  calendarContainer: { marginHorizontal: theme.spacing.lg, borderRadius: 24, overflow: 'hidden', elevation: 10, shadowColor: '#000', shadowOpacity: 0.15, shadowOffset: { width: 0, height: 10 }, shadowRadius: 20, backgroundColor: '#ffffff', marginBottom: theme.spacing.xl, paddingVertical: 10 },
   
-  agendaContainer: { paddingHorizontal: theme.spacing.lg, paddingBottom: 40 },
-  agendaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textSecondary, marginBottom: theme.spacing.md },
+  agendaContainer: { paddingHorizontal: theme.spacing.lg, paddingBottom: 100 },
+  agendaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#ffffff', marginBottom: theme.spacing.md, textShadowColor: 'rgba(0,0,0,0.1)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 },
   
-  emptyState: { alignItems: 'center', marginTop: 20, padding: 20 },
-  emptyStateText: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, textAlign: 'center' },
+  emptyState: { alignItems: 'center', marginTop: 10, padding: 20, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 16 },
+  emptyStateText: { fontSize: theme.typography.sizes.bodyLg, color: '#ffffff', textAlign: 'center', fontWeight: 'bold' },
 
-  // Cards (Reaproveitados)
-  taskCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#e8f5e9', borderLeftWidth: 4, borderLeftColor: '#4caf50' },
+  // Base Card Style (ZenZ)
+  baseCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)'
+  },
+  
   taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   itemTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, flex: 1, marginBottom: 4 },
   
-  eventCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, flexDirection: 'row', alignItems: 'center', backgroundColor: '#ffebee', borderLeftWidth: 4, borderLeftColor: '#f44336' },
-  eventLeft: { paddingRight: theme.spacing.md, borderRightWidth: 1, borderColor: 'rgba(0,0,0,0.1)', marginRight: theme.spacing.md, alignItems: 'center', minWidth: 60 },
-  eventTimeText: { fontSize: theme.typography.sizes.bodyLg, fontWeight: 'bold', color: theme.colors.textPrimary },
-  
-  noticeCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#fff3e0', borderLeftWidth: 4, borderLeftColor: '#ff9800' },
-  listCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#e0f7fa', borderLeftWidth: 4, borderLeftColor: '#00bcd4' },
-  ideaCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#fffde7', borderLeftWidth: 4, borderLeftColor: '#ffeb3b' },
+  eventCard: { flexDirection: 'row', alignItems: 'center' },
+  eventLeft: { backgroundColor: '#FFF1F2', padding: theme.spacing.md, borderRadius: 16, marginRight: theme.spacing.md, alignItems: 'center', minWidth: 65 },
+  eventTimeText: { fontSize: theme.typography.sizes.bodyLg, fontWeight: '900', color: '#881337' },
   
   itemRight: { flex: 1 },
-  spaceBadge: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, fontWeight: '500' },
+  spaceBadge: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, fontWeight: '600' },
 
-  badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 8 },
-  badgeText: { fontSize: 10, fontWeight: 'bold', color: '#fff', textTransform: 'uppercase' },
-  priority_high: { backgroundColor: theme.colors.error },
-  priority_medium: { backgroundColor: theme.colors.warning },
-  priority_low: { backgroundColor: theme.colors.secondary },
+  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, marginLeft: 8 },
+  badgeText: { fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' },
+  priority_high: { backgroundColor: '#FEE2E2' },
+  priority_high_text: { color: '#B91C1C' },
+  priority_medium: { backgroundColor: '#FEF3C7' },
+  priority_medium_text: { color: '#B45309' },
+  priority_low: { backgroundColor: '#E0E7FF' },
+  priority_low_text: { color: '#4338CA' },
+
+  fab: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#EC4899', // Pinkish red, like the image
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#EC4899',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.5,
+    shadowRadius: 15,
+    elevation: 8
+  }
 });
