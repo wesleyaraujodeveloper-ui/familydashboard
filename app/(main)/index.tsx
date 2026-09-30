@@ -13,7 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function OverviewScreen() {
   const { user } = useAuth();
   const { activeGroup, groups, setActiveGroup } = useGroup();
-  const { spaces, activeSpace, setActiveSpace } = useSpace();
+  const { spaces, activeSpace, setActiveSpace, setSpaces } = useSpace();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -173,9 +173,18 @@ export default function OverviewScreen() {
               <TouchableOpacity 
                 key={group.id} 
                 style={[styles.expandedItem, activeGroup?.id === group.id && styles.expandedItemActive]}
-                onPress={() => {
+                onPress={async () => {
                   setActiveGroup(group);
                   setExpandedSection(null);
+                  const { data: spacesData } = await supabase.from('spaces').select('*').eq('group_id', group.id).order('created_at', { ascending: true });
+                  if (spacesData && spacesData.length > 0) {
+                    setSpaces(spacesData);
+                    setActiveSpace(spacesData[0]);
+                  } else {
+                    setSpaces([]);
+                    setActiveSpace(null as any);
+                  }
+                  router.push('/(main)/mural');
                 }}
               >
                 <Feather name="users" size={16} color={activeGroup?.id === group.id ? theme.colors.primary : theme.colors.textSecondary} />
