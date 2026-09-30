@@ -34,6 +34,6 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     storage: ExpoStorage,
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false,
+    detectSessionInUrl: true,
   },
 });
