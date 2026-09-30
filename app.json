@@ -21,7 +21,14 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png",
+      "name": "Mural da Família",
+      "shortName": "Mural",
+      "themeColor": "#e06d53",
+      "backgroundColor": "#f8fafc",
+      "display": "standalone",
+      "orientation": "portrait"
     },
     "plugins": [
       "expo-router",
