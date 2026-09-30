@@ -38,12 +38,16 @@ export default function RootLayout() {
             router.replace('/(onboarding)/create-group' as any);
           }
         } else {
-          // Tem grupo -> Salva no Zustand e vai pro Mural
-          if (!activeGroup || activeGroup.id !== data[0].id) {
-            setGroups(data);
+          // Tem grupo -> Atualiza a lista no Zustand
+          setGroups(data);
+
+          // Verifica se o grupo ativo atual ainda existe na lista do usuário
+          const isCurrentGroupValid = activeGroup && data.some(g => g.id === activeGroup.id);
+
+          if (!isCurrentGroupValid) {
             setActiveGroup(data[0]);
 
-            // Busca os espaços apenas quando carrega o grupo pela primeira vez
+            // Busca os espaços apenas quando carrega o grupo pela primeira vez ou quando forçado a mudar
             const { data: spacesData } = await supabase
               .from('spaces')
               .select('*')
@@ -53,6 +57,9 @@ export default function RootLayout() {
             if (spacesData && spacesData.length > 0) {
               setSpaces(spacesData);
               setActiveSpace(spacesData[0]);
+            } else {
+              setSpaces([]);
+              setActiveSpace(null as any);
             }
           }
           
