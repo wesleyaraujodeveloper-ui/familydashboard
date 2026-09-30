@@ -62,7 +62,9 @@ export default function RootLayout() {
         }
       } else {
         // Sem sessão -> Tela de Welcome
-        if (!inAuthGroup && segments[1] !== 'welcome') {
+        // Previne redirecionamento se estivermos no meio do callback OAuth do Supabase
+        const isOAuthCallback = typeof window !== 'undefined' && window.location.hash.includes('access_token');
+        if (!isOAuthCallback && !inAuthGroup && segments[1] !== 'welcome') {
           router.replace('/(onboarding)/welcome' as any);
         }
       }
