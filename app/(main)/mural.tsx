@@ -286,11 +286,11 @@ export default function MuralScreen() {
           contentContainerStyle={styles.boardScroll}
         >
           {/* Coluna 1: A Fazer */}
-          <View style={[styles.boardColumn, { width: columnWidth }]}>
+          <View style={[styles.boardColumn, { width: columnWidth, backgroundColor: '#F8FAFC', borderColor: '#F1F5F9' }]}>
             <View style={styles.columnHeader}>
               <View style={[styles.columnDot, { backgroundColor: theme.colors.error }]} />
               <Text style={styles.columnTitle}>A Fazer</Text>
-              <View style={styles.columnCount}><Text style={styles.columnCountText}>{board.todo.length}</Text></View>
+              <View style={[styles.columnCount, { backgroundColor: '#E2E8F0' }]}><Text style={[styles.columnCountText, { color: '#475569' }]}>{board.todo.length}</Text></View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
               {board.todo.map(renderCard)}
@@ -298,11 +298,11 @@ export default function MuralScreen() {
           </View>
 
           {/* Coluna 2: Em Andamento */}
-          <View style={[styles.boardColumn, { width: columnWidth }]}>
+          <View style={[styles.boardColumn, { width: columnWidth, backgroundColor: '#FFFBEB', borderColor: '#FEF3C7' }]}>
             <View style={styles.columnHeader}>
               <View style={[styles.columnDot, { backgroundColor: theme.colors.primary }]} />
               <Text style={styles.columnTitle}>Em Andamento</Text>
-              <View style={styles.columnCount}><Text style={styles.columnCountText}>{board.in_progress.length}</Text></View>
+              <View style={[styles.columnCount, { backgroundColor: '#FDE68A' }]}><Text style={[styles.columnCountText, { color: '#92400E' }]}>{board.in_progress.length}</Text></View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
               {board.in_progress.map(renderCard)}
@@ -310,11 +310,11 @@ export default function MuralScreen() {
           </View>
 
           {/* Coluna 3: Aguardando */}
-          <View style={[styles.boardColumn, { width: columnWidth }]}>
+          <View style={[styles.boardColumn, { width: columnWidth, backgroundColor: '#F5F3FF', borderColor: '#EDE9FE' }]}>
             <View style={styles.columnHeader}>
               <View style={[styles.columnDot, { backgroundColor: theme.colors.warning }]} />
               <Text style={styles.columnTitle}>Aguardando</Text>
-              <View style={styles.columnCount}><Text style={styles.columnCountText}>{board.waiting.length}</Text></View>
+              <View style={[styles.columnCount, { backgroundColor: '#DDD6FE' }]}><Text style={[styles.columnCountText, { color: '#5B21B6' }]}>{board.waiting.length}</Text></View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
               {board.waiting.map(renderCard)}
@@ -322,11 +322,11 @@ export default function MuralScreen() {
           </View>
 
           {/* Coluna 4: Concluído */}
-          <View style={[styles.boardColumn, { width: columnWidth }]}>
+          <View style={[styles.boardColumn, { width: columnWidth, backgroundColor: '#F0FDF4', borderColor: '#DCFCE7' }]}>
             <View style={styles.columnHeader}>
               <View style={[styles.columnDot, { backgroundColor: theme.colors.success }]} />
               <Text style={styles.columnTitle}>Concluído</Text>
-              <View style={styles.columnCount}><Text style={styles.columnCountText}>{board.done.length}</Text></View>
+              <View style={[styles.columnCount, { backgroundColor: '#BBF7D0' }]}><Text style={[styles.columnCountText, { color: '#166534' }]}>{board.done.length}</Text></View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
               {board.done.map(renderCard)}
@@ -427,23 +427,23 @@ const styles = StyleSheet.create({
   
   // Base Card Style
   baseCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     borderRadius: 20,
     padding: theme.spacing.lg,
     marginBottom: theme.spacing.md,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 3,
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.02)'
+    borderColor: 'rgba(0,0,0,0.03)'
   },
   
   taskCard: { 
-    // Uses baseCard
+    // Pure white background, lets the column color create the tone contrast
   },
-  taskCardCompleted: { opacity: 0.5 },
+  taskCardCompleted: { opacity: 0.6 },
   taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   taskTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, flex: 1 },
   taskTitleCompleted: { textDecorationLine: 'line-through', color: theme.colors.textMuted },
@@ -458,17 +458,12 @@ const styles = StyleSheet.create({
   priority_low: { backgroundColor: '#E0E7FF' },
   priority_low_text: { color: '#4338CA' },
   
-  noticeCard: { 
-    backgroundColor: '#FFFBEB',
-    borderColor: '#FEF3C7'
-  },
+  noticeCard: { },
   noticeText: { fontSize: theme.typography.sizes.bodyLg, color: '#92400E', fontStyle: 'italic', lineHeight: 22 },
   
-  eventCard: { 
-    flexDirection: 'row', alignItems: 'center'
-  },
+  eventCard: { flexDirection: 'row', alignItems: 'center' },
   eventLeft: { 
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FFF1F2',
     padding: theme.spacing.md,
     borderRadius: 16,
     marginRight: theme.spacing.md, 
@@ -476,19 +471,13 @@ const styles = StyleSheet.create({
     minWidth: 65 
   },
   eventRight: { flex: 1 },
-  eventDateText: { fontSize: 12, fontWeight: 'bold', color: '#B91C1C', textTransform: 'uppercase' },
-  eventTimeText: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#991B1B' },
+  eventDateText: { fontSize: 12, fontWeight: 'bold', color: '#BE123C', textTransform: 'uppercase' },
+  eventTimeText: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#881337' },
   
-  listCard: { 
-    backgroundColor: '#F0FDF4',
-    borderColor: '#DCFCE7'
-  },
-  listTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#166534' },
+  listCard: { },
+  listTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#0F766E' },
   
-  ideaCard: { 
-    backgroundColor: '#F8FAFC',
-    borderColor: '#E2E8F0'
-  },
+  ideaCard: { },
   ideaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#334155', marginBottom: theme.spacing.xs },
 
   // --- Modal Styles ---
