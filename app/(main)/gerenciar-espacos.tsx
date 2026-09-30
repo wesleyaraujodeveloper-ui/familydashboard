@@ -41,7 +41,7 @@ export default function GerenciarEspacosScreen() {
       const newSpaces = spaces.filter(s => s.id !== spaceId);
       setSpaces(newSpaces);
       if (activeSpace?.id === spaceId) {
-        setActiveSpace(newSpaces.length > 0 ? newSpaces[0] : null);
+        setActiveSpace(newSpaces.length > 0 ? newSpaces[0] : (null as any));
       }
     }
   };
@@ -63,7 +63,7 @@ export default function GerenciarEspacosScreen() {
       const newSpaces = spaces.map(s => s.id === spaceId ? { ...s, name: editName.trim() } : s);
       setSpaces(newSpaces);
       if (activeSpace?.id === spaceId) {
-        setActiveSpace(newSpaces.find(s => s.id === spaceId) || null);
+        setActiveSpace(newSpaces.find(s => s.id === spaceId) || (null as any));
       }
       setEditingSpaceId(null);
       setEditName('');

@@ -63,7 +63,7 @@ export default function RootLayout() {
             }
           }
           
-          if (inAuthGroup || (inOnboarding && segments[1] !== 'create-group') || segments.length === 0) {
+          if (inAuthGroup || (inOnboarding && segments[1] !== 'create-group') || (segments.length as number) === 0) {
             router.replace('/(main)' as any);
           }
         }

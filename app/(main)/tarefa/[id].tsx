@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { theme } from '../../../src/theme';
 import { useGroup } from '../../../src/store/group';
@@ -102,7 +102,7 @@ export default function TarefaDetailsScreen() {
       <Card elevation="level1" style={[styles.card, task.status === 'completed' && styles.cardCompleted]}>
         <View style={styles.headerRow}>
           <Text style={[styles.title, task.status === 'completed' && styles.titleCompleted]}>{task.title}</Text>
-          <View style={[styles.badge, styles[`priority_${task.priority}` as keyof typeof styles]]}>
+          <View style={[styles.badge, (styles as any)[`priority_${task.priority}`]]}>
             <Text style={styles.badgeText}>{task.priority}</Text>
           </View>
         </View>

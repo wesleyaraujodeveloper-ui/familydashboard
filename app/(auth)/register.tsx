@@ -109,7 +109,7 @@ export default function RegisterScreen() {
 
           <Button 
             title="Criar com Google" 
-            variant="outline"
+            variant="secondary"
             onPress={handleGoogleLogin} 
             style={{ marginBottom: 16 }}
             icon={<Feather name="chrome" size={20} color={theme.colors.textPrimary} style={{ marginRight: 8 }} />}

@@ -141,7 +141,7 @@ export default function MeuDiaScreen() {
             <View style={styles.taskHeader}>
               <Text style={styles.itemTitle}>✅ {item.title}</Text>
               {item.priority && (
-                <View style={[styles.badge, styles[`priority_${item.priority}` as keyof typeof styles]]}>
+                <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
                   <Text style={styles.badgeText}>{item.priority}</Text>
                 </View>
               )}
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.background },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { padding: theme.spacing.lg, paddingBottom: 0 },
-  title: { fontSize: theme.typography.sizes.displaySm, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.xs },
+  title: { fontSize: theme.typography.sizes.headlineXl, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.xs },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, marginBottom: theme.spacing.lg },
   
   feed: { flex: 1 },

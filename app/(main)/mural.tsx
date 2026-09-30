@@ -235,7 +235,7 @@ export default function MuralScreen() {
           {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
           <View style={styles.taskHeader}>
             <Text style={[styles.taskTitle, item.status === 'done' && styles.taskTitleCompleted]}>✅ {item.title}</Text>
-            <View style={[styles.badge, styles[`priority_${item.priority}` as keyof typeof styles]]}>
+            <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
               <Text style={styles.badgeText}>{item.priority}</Text>
             </View>
           </View>

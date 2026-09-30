@@ -89,7 +89,7 @@ export default function LoginScreen() {
 
           <Button 
             title="Continuar com Google" 
-            variant="outline"
+            variant="secondary"
             onPress={handleGoogleLogin} 
             style={{ marginBottom: 16 }}
             icon={<Feather name="chrome" size={20} color={theme.colors.textPrimary} style={{ marginRight: 8 }} />}

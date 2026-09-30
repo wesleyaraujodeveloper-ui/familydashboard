@@ -149,7 +149,7 @@ export default function CalendarioScreen() {
   const renderItem = (item: CalendarItem) => {
     if (item.type === 'event') {
       return (
-        <Card elevation="none" style={[styles.baseCard, { padding: theme.spacing.md }]} key={'event' + item.id}>
+        <Card style={[styles.baseCard, { padding: theme.spacing.md }]} key={'event' + item.id}>
           <View style={[styles.eventCard, { padding: 0, marginBottom: 0 }]}>
             <View style={styles.eventLeft}>
               <Text style={styles.eventTimeText}>{item.time_formatted}</Text>
@@ -166,12 +166,12 @@ export default function CalendarioScreen() {
     if (item.type === 'task') {
       return (
         <TouchableOpacity key={'task' + item.id} onPress={() => router.push(`/(main)/tarefa/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="none" style={[styles.baseCard, item.status === 'done' && { opacity: 0.5 }]}>
+          <Card style={[styles.baseCard, item.status === 'done' && { opacity: 0.5 }]}>
             <View style={styles.taskHeader}>
               <Text style={[styles.itemTitle, item.status === 'done' && { textDecorationLine: 'line-through' }]}>✅ {item.title}</Text>
               {item.priority && (
-                <View style={[styles.badge, styles[`priority_${item.priority}` as keyof typeof styles]]}>
-                  <Text style={[styles.badgeText, styles[`priority_${item.priority}_text` as keyof typeof styles]]}>{item.priority}</Text>
+                <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
+                  <Text style={[styles.badgeText, (styles as any)[`priority_${item.priority}_text`]]}>{item.priority}</Text>
                 </View>
               )}
             </View>
@@ -183,7 +183,7 @@ export default function CalendarioScreen() {
 
     if (item.type === 'notice') {
       return (
-        <Card elevation="none" style={styles.baseCard} key={'notice' + item.id}>
+        <Card style={styles.baseCard} key={'notice' + item.id}>
           <Text style={styles.itemTitle}>📌 {item.title}</Text>
           <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
         </Card>
@@ -193,7 +193,7 @@ export default function CalendarioScreen() {
     if (item.type === 'list') {
       return (
         <TouchableOpacity key={'list' + item.id} onPress={() => router.push(`/(main)/lista/${item.id}` as any)} activeOpacity={0.8}>
-          <Card elevation="none" style={styles.baseCard}>
+          <Card style={styles.baseCard}>
             <Text style={styles.itemTitle}>📋 {item.title}</Text>
             <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
           </Card>
@@ -203,7 +203,7 @@ export default function CalendarioScreen() {
 
     if (item.type === 'idea') {
       return (
-        <Card elevation="none" style={styles.baseCard} key={'idea' + item.id}>
+        <Card style={styles.baseCard} key={'idea' + item.id}>
           <Text style={styles.itemTitle}>💡 {item.title}</Text>
           <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
         </Card>

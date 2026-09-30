@@ -62,7 +62,7 @@ export default function SettingsScreen() {
         <Text style={styles.text}>ID: {user?.id}</Text>
         <Button 
           title="Sair da Conta (Logout)" 
-          variant="outline" 
+          variant="secondary" 
           onPress={signOut} 
           style={{ marginTop: theme.spacing.md, alignSelf: 'flex-start' }}
         />

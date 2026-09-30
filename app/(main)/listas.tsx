@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   listCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: theme.roundness.lg,
+    borderRadius: 24,
     padding: theme.spacing.lg,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   listImage: {
     width: '100%',
     height: 120,
-    borderRadius: theme.roundness.md,
+    borderRadius: 16,
     marginBottom: theme.spacing.md,
     resizeMode: 'cover',
   },
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 60,
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    borderRadius: theme.roundness.lg,
+    borderRadius: 24,
     marginTop: theme.spacing.xl,
   },
   emptyIconContainer: {

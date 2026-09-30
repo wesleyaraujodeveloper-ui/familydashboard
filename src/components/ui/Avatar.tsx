@@ -5,17 +5,32 @@ import { theme } from '../../theme';
 interface AvatarProps {
   src?: string;
   initials?: string;
-  size?: number;
+  size?: number | 'sm' | 'md' | 'lg' | 'xl';
+  name?: string;
+  url?: string;
 }
 
-export const Avatar = ({ src, initials, size = 40 }: AvatarProps) => {
-  const containerStyle = { width: size, height: size, borderRadius: size / 2 };
+export const Avatar = ({ src, initials, size = 40, name, url }: AvatarProps) => {
+  let numSize = 40;
+  if (typeof size === 'string') {
+    if (size === 'sm') numSize = 32;
+    if (size === 'md') numSize = 48;
+    if (size === 'lg') numSize = 64;
+    if (size === 'xl') numSize = 80;
+  } else {
+    numSize = size;
+  }
+  
+  const containerStyle = { width: numSize, height: numSize, borderRadius: numSize / 2 };
+  const imageSrc = src || url;
+  const chars = initials || (name ? name.substring(0, 2).toUpperCase() : '?');
+
   return (
     <View style={[styles.container, containerStyle]}>
-      {src ? (
-        <Image source={{ uri: src }} style={containerStyle} />
+      {imageSrc ? (
+        <Image source={{ uri: imageSrc }} style={containerStyle} />
       ) : (
-        <Text style={styles.initials}>{initials}</Text>
+        <Text style={[styles.initials, { fontSize: numSize * 0.4 }]}>{chars}</Text>
       )}
     </View>
   );

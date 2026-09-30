@@ -76,7 +76,7 @@ export default function HistoricoScreen() {
       case 'created': return <Feather name="plus-circle" size={16} color={theme.colors.primary} />;
       case 'completed': return <Feather name="check-circle" size={16} color={theme.colors.secondary} />;
       case 'deleted': return <Feather name="trash-2" size={16} color={theme.colors.error} />;
-      case 'commented': return <Feather name="message-circle" size={16} color={theme.colors.info} />;
+      case 'commented': return <Feather name="message-circle" size={16} color={theme.colors.accentSky} />;
       default: return <Feather name="activity" size={16} color={theme.colors.textMuted} />;
     }
   };
