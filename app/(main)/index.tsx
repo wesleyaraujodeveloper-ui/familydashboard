@@ -12,12 +12,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function OverviewScreen() {
   const { user } = useAuth();
-  const { activeGroup } = useGroup();
-  const { spaces } = useSpace();
+  const { activeGroup, groups, setActiveGroup } = useGroup();
+  const { spaces, activeSpace, setActiveSpace } = useSpace();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
+  const [expandedSection, setExpandedSection] = useState<'groups' | 'spaces' | null>(null);
   
   // Metricas
   const [tasksToday, setTasksToday] = useState({ total: 0, done: 0, progress: 0 });
@@ -143,20 +144,76 @@ export default function OverviewScreen() {
             <Text style={styles.quickActionLabel}>Meu Dia</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/listas')}>
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => setExpandedSection(prev => prev === 'groups' ? null : 'groups')}>
             <View style={[styles.quickActionIcon, { backgroundColor: '#FEF3C7' }]}>
-              <Feather name="check-square" size={24} color="#D97706" />
+              <Feather name="users" size={24} color="#D97706" />
             </View>
-            <Text style={styles.quickActionLabel}>Listas</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
+              <Text style={styles.quickActionLabel}>Grupos</Text>
+              <Feather name={expandedSection === 'groups' ? 'chevron-up' : 'chevron-down'} size={14} color="#D97706" />
+            </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/calendario')}>
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => setExpandedSection(prev => prev === 'spaces' ? null : 'spaces')}>
             <View style={[styles.quickActionIcon, { backgroundColor: '#DCFCE7' }]}>
-              <Feather name="calendar" size={24} color="#16A34A" />
+              <Feather name="hash" size={24} color="#16A34A" />
             </View>
-            <Text style={styles.quickActionLabel}>Agenda</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
+              <Text style={styles.quickActionLabel}>Espaços</Text>
+              <Feather name={expandedSection === 'spaces' ? 'chevron-up' : 'chevron-down'} size={14} color="#16A34A" />
+            </View>
           </TouchableOpacity>
         </View>
+
+        {/* EXPANDED SECTIONS */}
+        {expandedSection === 'groups' && (
+          <View style={styles.expandedPanel}>
+            <Text style={styles.expandedTitle}>Meus Grupos</Text>
+            {groups.map(group => (
+              <TouchableOpacity 
+                key={group.id} 
+                style={[styles.expandedItem, activeGroup?.id === group.id && styles.expandedItemActive]}
+                onPress={() => {
+                  setActiveGroup(group);
+                  setExpandedSection(null);
+                }}
+              >
+                <Feather name="users" size={16} color={activeGroup?.id === group.id ? theme.colors.primary : theme.colors.textSecondary} />
+                <Text style={[styles.expandedItemText, activeGroup?.id === group.id && { color: theme.colors.primary, fontWeight: 'bold' }]}>{group.name}</Text>
+                {activeGroup?.id === group.id && <Feather name="check" size={16} color={theme.colors.primary} />}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={[styles.expandedActionBtn, { borderColor: '#F59E0B' }]} onPress={() => router.push('/(onboarding)/create-group' as any)}>
+              <Feather name="plus" size={16} color="#D97706" />
+              <Text style={[styles.expandedActionText, { color: '#D97706' }]}>Criar ou Entrar em novo Grupo</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {expandedSection === 'spaces' && (
+          <View style={styles.expandedPanel}>
+            <Text style={styles.expandedTitle}>Espaços de {activeGroup?.name}</Text>
+            {spaces.map(space => (
+              <TouchableOpacity 
+                key={space.id} 
+                style={[styles.expandedItem, activeSpace?.id === space.id && styles.expandedItemActive]}
+                onPress={() => {
+                  setActiveSpace(space);
+                  setExpandedSection(null);
+                  router.push(`/(main)/spaces/${space.id}` as any);
+                }}
+              >
+                <Feather name="hash" size={16} color={activeSpace?.id === space.id ? theme.colors.secondary : theme.colors.textSecondary} />
+                <Text style={[styles.expandedItemText, activeSpace?.id === space.id && { color: theme.colors.secondary, fontWeight: 'bold' }]}>{space.name}</Text>
+                {activeSpace?.id === space.id && <Feather name="check" size={16} color={theme.colors.secondary} />}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={[styles.expandedActionBtn, { borderColor: '#10B981' }]} onPress={() => router.push('/(main)/criar-espaco' as any)}>
+              <Feather name="plus" size={16} color="#16A34A" />
+              <Text style={[styles.expandedActionText, { color: '#16A34A' }]}>Novo Espaço</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* METRICAS GRID */}
         <Text style={styles.sectionTitle}>Resumo do Lar</Text>
@@ -397,6 +454,58 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginHorizontal: -8,
     marginBottom: 20
+  },
+  expandedPanel: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 24,
+    padding: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  expandedTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: theme.colors.textSecondary,
+    marginBottom: 12,
+    marginLeft: 4,
+  },
+  expandedItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 16,
+    marginBottom: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  expandedItemActive: {
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  expandedItemText: {
+    flex: 1,
+    fontSize: 16,
+    color: theme.colors.textPrimary,
+    marginLeft: 12,
+  },
+  expandedActionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    marginTop: 4,
+  },
+  expandedActionText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
   metricCard: {
     width: '45%',
