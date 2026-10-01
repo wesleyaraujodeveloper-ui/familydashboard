@@ -30,12 +30,6 @@ CREATE POLICY "Users can delete comments in their groups"
     profile_id = auth.uid()
   );
 
--- Task Checklists:
-CREATE POLICY "Users can delete task_checklist_items in their spaces" 
-  ON task_checklist_items FOR DELETE USING (
-    public.is_group_member((SELECT s.group_id FROM spaces s JOIN tasks t ON t.space_id = s.id WHERE t.id = task_checklist_items.task_id))
-  );
-
 -- Task Assignees:
 CREATE POLICY "Users can delete task_assignees in their spaces" 
   ON task_assignees FOR DELETE USING (
