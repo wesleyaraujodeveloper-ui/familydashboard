@@ -30,11 +30,11 @@ export const colors = {
 
 export const darkColors = {
   // Dark Mode equivalents
-  surface: '#1B1D21',
-  surfaceSubdued: '#23262C',
-  background: '#121316',
-  border: '#2B2E36',
-  borderSubtle: '#21242A',
+  surface: '#1E1F24',
+  surfaceSubdued: '#131417',
+  background: '#0E0F12',
+  border: '#272932',
+  borderSubtle: '#1C1D22',
   textPrimary: '#F3F4F6',
   textSecondary: '#9CA3AF',
   textMuted: '#6B7280',

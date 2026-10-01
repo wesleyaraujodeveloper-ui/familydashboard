@@ -109,8 +109,12 @@ export default function OverviewScreen() {
 
   const firstName = profile?.name ? profile.name.split(' ')[0] : 'Usuário';
 
+  const gradientColors = theme.isDarkMode 
+    ? ['#201025', '#161625', '#0E0F12']
+    : ['#FCE7F3', '#E0E7FF', '#E0F2FE'];
+
   return (
-    <LinearGradient colors={['#FCE7F3', '#E0E7FF', '#E0F2FE']} style={styles.mainContainer}>
+    <LinearGradient colors={gradientColors} style={styles.mainContainer}>
       <ScrollView style={styles.scrollArea} showsVerticalScrollIndicator={false}>
         
         {/* HEADER DE BOAS VINDAS */}
@@ -133,36 +137,36 @@ export default function OverviewScreen() {
         <Text style={styles.sectionTitle}>Ações Rápidas</Text>
         <View style={styles.quickActionsContainer}>
           <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/mural')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: '#DBEAFE' }]}>
-              <Feather name="layout" size={24} color="#3B82F6" />
+            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#0A192F' : '#DBEAFE' }]}>
+              <Feather name="layout" size={24} color={theme.isDarkMode ? '#38BDF8' : '#3B82F6'} />
             </View>
             <Text style={styles.quickActionLabel}>Mural</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/meu-dia')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: '#FCE7F3' }]}>
-              <Feather name="sun" size={24} color="#EC4899" />
+            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#3A0C1E' : '#FCE7F3' }]}>
+              <Feather name="sun" size={24} color={theme.isDarkMode ? '#F472B6' : '#EC4899'} />
             </View>
             <Text style={styles.quickActionLabel}>Meu Dia</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.quickActionBox} onPress={() => setExpandedSection(prev => prev === 'groups' ? null : 'groups')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: '#FEF3C7' }]}>
-              <Feather name="users" size={24} color="#D97706" />
+            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#451A03' : '#FEF3C7' }]}>
+              <Feather name="users" size={24} color={theme.isDarkMode ? '#FBBF24' : '#D97706'} />
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
               <Text style={styles.quickActionLabel}>Grupos</Text>
-              <Feather name={expandedSection === 'groups' ? 'chevron-up' : 'chevron-down'} size={14} color="#D97706" />
+              <Feather name={expandedSection === 'groups' ? 'chevron-up' : 'chevron-down'} size={14} color={theme.isDarkMode ? '#FBBF24' : '#D97706'} />
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.quickActionBox} onPress={() => setExpandedSection(prev => prev === 'spaces' ? null : 'spaces')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: '#DCFCE7' }]}>
-              <Feather name="hash" size={24} color="#16A34A" />
+            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#064E3B' : '#DCFCE7' }]}>
+              <Feather name="hash" size={24} color={theme.isDarkMode ? '#34D399' : '#16A34A'} />
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
               <Text style={styles.quickActionLabel}>Espaços</Text>
-              <Feather name={expandedSection === 'spaces' ? 'chevron-up' : 'chevron-down'} size={14} color="#16A34A" />
+              <Feather name={expandedSection === 'spaces' ? 'chevron-up' : 'chevron-down'} size={14} color={theme.isDarkMode ? '#34D399' : '#16A34A'} />
             </View>
           </TouchableOpacity>
         </View>
@@ -225,23 +229,23 @@ export default function OverviewScreen() {
         <View style={styles.grid}>
           
           {/* Metric 1: Tarefas de Hoje */}
-          <View style={styles.metricCard}>
+          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
-              <View style={[styles.iconBox, { backgroundColor: '#FEE2E2' }]}>
-                <Feather name="check-circle" size={20} color="#EF4444" />
+              <View style={[styles.iconBox, { backgroundColor: theme.isDarkMode ? '#3A1515' : '#FEE2E2' }]}>
+                <Feather name="check-circle" size={20} color={theme.isDarkMode ? '#F87171' : '#EF4444'} />
               </View>
-              <View style={[styles.pill, { backgroundColor: '#FEE2E2' }]}>
-                <Text style={[styles.pillText, { color: '#B91C1C' }]}>{tasksToday.progress.toFixed(0)}% Feito</Text>
+              <View style={[styles.pill, { backgroundColor: theme.isDarkMode ? '#3A1515' : '#FEE2E2' }]}>
+                <Text style={[styles.pillText, { color: theme.isDarkMode ? '#F87171' : '#B91C1C' }]}>{tasksToday.progress.toFixed(0)}% Feito</Text>
               </View>
             </View>
             <View style={styles.metricBody}>
               <View style={styles.valRow}>
-                <Text style={styles.valNum}>{tasksToday.done}/{tasksToday.total}</Text>
+                <Text style={[styles.valNum, { color: theme.isDarkMode ? '#FFFFFF' : '#1E1B4B' }]}>{tasksToday.done}/{tasksToday.total}</Text>
               </View>
-              <Text style={styles.valLabel}>tarefas hoje</Text>
-              <View style={styles.progressTrack}>
+              <Text style={[styles.valLabel, { color: theme.isDarkMode ? '#A78BFA' : '#6366F1' }]}>tarefas hoje</Text>
+              <View style={[styles.progressTrack, { backgroundColor: theme.isDarkMode ? 'rgba(248, 113, 113, 0.1)' : 'rgba(99, 102, 241, 0.1)' }]}>
                 <LinearGradient
-                  colors={['#FCA5A5', '#EF4444']}
+                  colors={theme.isDarkMode ? ['#991B1B', '#EF4444'] : ['#FCA5A5', '#EF4444']}
                   start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                   style={[styles.progressFill, { width: `${tasksToday.progress}%` }]}
                 />
@@ -250,22 +254,22 @@ export default function OverviewScreen() {
           </View>
 
           {/* Metric 2: Compromissos */}
-          <View style={styles.metricCard}>
+          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
-              <View style={[styles.iconBox, { backgroundColor: '#E0E7FF' }]}>
-                <Feather name="clock" size={20} color="#6366F1" />
+              <View style={[styles.iconBox, { backgroundColor: theme.isDarkMode ? '#1E1E3F' : '#E0E7FF' }]}>
+                <Feather name="clock" size={20} color={theme.isDarkMode ? '#818CF8' : '#6366F1'} />
               </View>
-              <View style={[styles.pill, { backgroundColor: '#E0E7FF' }]}>
-                <Text style={[styles.pillText, { color: '#4338CA' }]}>Eventos</Text>
+              <View style={[styles.pill, { backgroundColor: theme.isDarkMode ? '#1E1E3F' : '#E0E7FF' }]}>
+                <Text style={[styles.pillText, { color: theme.isDarkMode ? '#818CF8' : '#4338CA' }]}>Eventos</Text>
               </View>
             </View>
             <View style={styles.metricBody}>
               <View style={styles.valRow}>
-                <Text style={styles.valNum}>{upcomingEvents.length}</Text>
+                <Text style={[styles.valNum, { color: theme.isDarkMode ? '#FFFFFF' : '#1E1B4B' }]}>{upcomingEvents.length}</Text>
               </View>
-              <Text style={styles.valLabel}>hoje & breve</Text>
+              <Text style={[styles.valLabel, { color: theme.isDarkMode ? '#A78BFA' : '#6366F1' }]}>hoje & breve</Text>
               {upcomingEvents.length > 0 ? (
-                <Text style={styles.infoText} numberOfLines={1}>
+                <Text style={[styles.infoText, { color: theme.isDarkMode ? '#D1D5DB' : '#475569' }]} numberOfLines={1}>
                   {upcomingEvents[0].title}
                 </Text>
               ) : (
@@ -275,7 +279,7 @@ export default function OverviewScreen() {
           </View>
 
           {/* Metric 3: Recados */}
-          <View style={styles.metricCard}>
+          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
               <View style={[styles.iconBox, { backgroundColor: '#FDF4FF' }]}>
                 <Feather name="heart" size={20} color="#D946EF" />
@@ -290,7 +294,7 @@ export default function OverviewScreen() {
               </View>
               <Text style={styles.valLabel}>novos recados</Text>
               {recentNotices.length > 0 ? (
-                <Text style={styles.infoText} numberOfLines={1}>
+                <Text style={[styles.infoText, { color: theme.isDarkMode ? '#D1D5DB' : '#475569' }]} numberOfLines={1}>
                   "{recentNotices[0].text}"
                 </Text>
               ) : (
@@ -300,7 +304,7 @@ export default function OverviewScreen() {
           </View>
 
           {/* Metric 4: Atrasadas */}
-          <View style={styles.metricCard}>
+          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
               <View style={[styles.iconBox, { backgroundColor: '#FFEDD5' }]}>
                 <Feather name="alert-circle" size={20} color="#F97316" />
