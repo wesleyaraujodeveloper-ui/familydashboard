@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ViewProps } from 'react-native';
-import { theme } from '../../theme';
+import { useAppTheme } from '../../theme/useAppTheme';
 
 interface CardProps extends ViewProps {
   children: React.ReactNode;
@@ -8,6 +8,8 @@ interface CardProps extends ViewProps {
 }
 
 export const Card = ({ children, elevation = 'level1', style, ...props }: CardProps) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   return (
     <View style={[styles.card, theme.shadows[elevation], style]} {...props}>
       {children}
@@ -15,7 +17,7 @@ export const Card = ({ children, elevation = 'level1', style, ...props }: CardPr
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   card: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.lg,

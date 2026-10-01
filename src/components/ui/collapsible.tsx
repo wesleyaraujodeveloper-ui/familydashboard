@@ -11,6 +11,7 @@ import { useTheme } from '@/hooks/use-theme';
 export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
+  const styles = getStyles(theme);
 
   return (
     <ThemedView>
@@ -40,7 +41,7 @@ export function Collapsible({ children, title }: PropsWithChildren & { title: st
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   heading: {
     flexDirection: 'row',
     alignItems: 'center',

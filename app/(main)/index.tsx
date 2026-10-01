@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Avatar } from '../../src/components/ui/Avatar';
 import { Feather, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '../../src/store/auth';
@@ -11,6 +11,8 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function OverviewScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { user } = useAuth();
   const { activeGroup, groups, setActiveGroup } = useGroup();
   const { spaces, activeSpace, setActiveSpace, setSpaces } = useSpace();
@@ -91,6 +93,8 @@ export default function OverviewScreen() {
   }, [user, activeGroup, spaces]);
 
   const getGreeting = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     const hour = new Date().getHours();
     if (hour < 12) return 'Bom dia';
     if (hour < 18) return 'Boa tarde';
@@ -343,7 +347,7 @@ export default function OverviewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   mainContainer: { flex: 1 },
   scrollArea: { flex: 1, padding: theme.spacing.lg },
   header: {

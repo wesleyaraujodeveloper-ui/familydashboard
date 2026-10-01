@@ -3,15 +3,19 @@ import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { Slot, Link, useRouter, usePathname } from 'expo-router';
 import { Modal, TouchableOpacity, Pressable, Image, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { useGroup } from '../../src/store/group';
 import { useSpace } from '../../src/store/space';
 import { supabase } from '../../src/services/supabase';
 import { Avatar } from '../../src/components/ui/Avatar';
 
 const SidebarLink = ({ href, icon, label, isActive, onPress }: any) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const handlePress = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     if (onPress) onPress();
     else router.push(href);
   };
@@ -25,6 +29,8 @@ const SidebarLink = ({ href, icon, label, isActive, onPress }: any) => {
 };
 
 export default function MainLayout() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768; // Desktop Breakpoint
   const { activeGroup, groups, setActiveGroup } = useGroup();
@@ -303,7 +309,7 @@ export default function MainLayout() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   // Desktop
   desktopContainer: { flex: 1, flexDirection: 'row', backgroundColor: '#F1F5F9' },
   sidebar: { 

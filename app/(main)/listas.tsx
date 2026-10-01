@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, RefreshControl, Image } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { supabase } from '../../src/services/supabase';
 import { useSpace } from '../../src/store/space';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ListasScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { activeSpace } = useSpace();
   const router = useRouter();
   const [lists, setLists] = useState<any[]>([]);
@@ -138,7 +140,7 @@ export default function ListasScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFBEB' },
   scrollContent: { padding: theme.spacing.lg, paddingBottom: 100, maxWidth: 800, marginHorizontal: 'auto', width: '100%' },

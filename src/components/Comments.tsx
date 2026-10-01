@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { theme } from '../theme';
+import { useAppTheme } from '../theme/useAppTheme';
 import { supabase } from '../services/supabase';
 import { useAuth } from '../store/auth';
 import { logActivity } from '../services/activity';
@@ -18,6 +18,8 @@ interface CommentsProps {
 }
 
 export function Comments({ entityType, entityId, spaceId, groupId, entityTitle }: CommentsProps) {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { user } = useAuth();
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -123,7 +125,7 @@ export function Comments({ entityType, entityId, spaceId, groupId, entityTitle }
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { padding: theme.spacing.xl, marginBottom: theme.spacing.md },
   title: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.md },
   loadingText: { color: theme.colors.textMuted },

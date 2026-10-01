@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Input } from '../../src/components/ui/Input';
 import { Button } from '../../src/components/ui/Button';
 import { Card } from '../../src/components/ui/Card';
@@ -17,6 +17,8 @@ import { Calendar } from 'react-native-calendars';
 import { Feather } from '@expo/vector-icons';
 
 export default function CriarTarefaScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const { activeSpace } = useSpace();
   const { activeGroup } = useGroup();
@@ -46,6 +48,8 @@ export default function CriarTarefaScreen() {
   };
 
   const handleDateChange = (text: string) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     let raw = text.replace(/\D/g, ''); 
     if (raw.length > 8) raw = raw.slice(0, 8); 
     let formatted = raw;
@@ -233,7 +237,7 @@ export default function CriarTarefaScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, width: '100%', marginHorizontal: 'auto' },
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, marginBottom: theme.spacing.xl, marginTop: theme.spacing.xs },

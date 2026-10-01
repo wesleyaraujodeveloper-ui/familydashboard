@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert, Image, ScrollView } from 'react-native';
-import { theme } from '../../src/theme';
+import { View, Text, StyleSheet, Alert, Image, ScrollView, Switch } from 'react-native';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Button } from '../../src/components/ui/Button';
 import { Card } from '../../src/components/ui/Card';
 import { Input } from '../../src/components/ui/Input';
 import { useAuth } from '../../src/store/auth';
 import { useGroup } from '../../src/store/group';
 import { supabase } from '../../src/services/supabase';
+import { useThemeStore } from '../../src/store/theme';
 
 export default function SettingsScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { user, signOut } = useAuth();
   const { activeGroup, setActiveGroup, setGroups } = useGroup();
   const [newGroupName, setNewGroupName] = useState('');
   const [loading, setLoading] = useState(false);
+  const { isDarkMode, toggleTheme } = useThemeStore();
 
   const handleUpdateGroup = async () => {
     if (!newGroupName.trim() || !activeGroup) return;
@@ -36,6 +40,8 @@ export default function SettingsScreen() {
   };
 
   const handleDeleteGroup = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     Alert.alert('Zona de Perigo', 'Tem certeza que deseja EXCLUIR a família inteira e todas as tarefas?', [
       { text: 'Cancelar', style: 'cancel' },
       { text: 'Sim, Excluir Tudo', style: 'destructive', onPress: async () => {
@@ -66,6 +72,19 @@ export default function SettingsScreen() {
           onPress={signOut} 
           style={{ marginTop: theme.spacing.md, alignSelf: 'flex-start' }}
         />
+      </Card>
+
+      <Card elevation="level1" style={styles.card}>
+        <Text style={styles.sectionTitle}>Aparência</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: theme.spacing.sm }}>
+          <Text style={styles.text}>Modo Escuro</Text>
+          <Switch 
+            value={isDarkMode} 
+            onValueChange={toggleTheme}
+            trackColor={{ false: theme.colors.border, true: theme.colors.primary }}
+            thumbColor={isDarkMode ? '#fff' : '#f4f3f4'}
+          />
+        </View>
       </Card>
 
       <Card elevation="level1" style={styles.card}>
@@ -105,7 +124,7 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg },
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.lg },
   card: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, maxWidth: 600 },

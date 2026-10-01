@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { theme } from '../../theme';
+import { useAppTheme } from '../../theme/useAppTheme';
 
 interface AvatarProps {
   src?: string;
@@ -11,6 +11,8 @@ interface AvatarProps {
 }
 
 export const Avatar = ({ src, initials, size = 40, name, url }: AvatarProps) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   let numSize = 40;
   if (typeof size === 'string') {
     if (size === 'sm') numSize = 32;
@@ -36,7 +38,7 @@ export const Avatar = ({ src, initials, size = 40, name, url }: AvatarProps) => 
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     backgroundColor: theme.colors.surfaceSubdued,
     alignItems: 'center',

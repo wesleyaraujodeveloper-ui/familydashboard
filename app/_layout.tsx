@@ -4,10 +4,11 @@ import { useAuth } from '../src/store/auth';
 import { useGroup } from '../src/store/group';
 import { useSpace } from '../src/store/space';
 import { View, ActivityIndicator } from 'react-native';
-import { theme } from '../src/theme';
+import { useAppTheme } from '../src/theme/useAppTheme';
 import { supabase } from '../src/services/supabase';
 
 export default function RootLayout() {
+  const theme = useAppTheme();
   const { isInitialized, session, initialize } = useAuth();
   const { setGroups, activeGroup, setActiveGroup } = useGroup();
   const { spaces, setSpaces, activeSpace, setActiveSpace } = useSpace();

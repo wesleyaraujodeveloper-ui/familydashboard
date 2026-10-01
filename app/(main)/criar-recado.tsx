@@ -5,7 +5,7 @@ import { decode } from 'base64-arraybuffer';
 import { Calendar } from 'react-native-calendars';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Input } from '../../src/components/ui/Input';
 import { Button } from '../../src/components/ui/Button';
 import { Card } from '../../src/components/ui/Card';
@@ -14,6 +14,8 @@ import { useSpace } from '../../src/store/space';
 import { useAuth } from '../../src/store/auth';
 
 export default function CriarRecadoScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const { activeSpace } = useSpace();
   const { user } = useAuth();
@@ -40,6 +42,8 @@ export default function CriarRecadoScreen() {
   };
 
   const handleDateChange = (text: string) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     let raw = text.replace(/\D/g, ''); 
     if (raw.length > 8) raw = raw.slice(0, 8); 
     let formatted = raw;
@@ -186,7 +190,7 @@ export default function CriarRecadoScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, width: '100%', marginHorizontal: 'auto' },
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, marginBottom: theme.spacing.xl, marginTop: theme.spacing.xs },

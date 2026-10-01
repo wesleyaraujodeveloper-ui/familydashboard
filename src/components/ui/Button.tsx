@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, TouchableOpacityProps, ActivityIndicator } from 'react-native';
-import { theme } from '../../theme';
+import { useAppTheme } from '../../theme/useAppTheme';
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -10,7 +10,11 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 export const Button = ({ title, variant = 'primary', isLoading, icon, style, ...props }: ButtonProps) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const getContainerStyle = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     switch (variant) {
       case 'secondary':
         return styles.secondaryContainer;
@@ -23,6 +27,8 @@ export const Button = ({ title, variant = 'primary', isLoading, icon, style, ...
   };
 
   const getTextStyle = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     switch (variant) {
       case 'secondary':
         return styles.secondaryText;
@@ -53,7 +59,7 @@ export const Button = ({ title, variant = 'primary', isLoading, icon, style, ...
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     paddingVertical: theme.spacing.sm + 2, // 10px
     paddingHorizontal: theme.spacing.md + 2, // 18px

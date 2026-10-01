@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Button } from '../../src/components/ui/Button';
 import { Card } from '../../src/components/ui/Card';
 import { Feather } from '@expo/vector-icons';
@@ -10,6 +10,8 @@ import { useGroup } from '../../src/store/group';
 import { useSpace } from '../../src/store/space';
 
 export default function GerenciarEspacosScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const { activeGroup } = useGroup();
   const { spaces, setSpaces, activeSpace, setActiveSpace } = useSpace();
@@ -47,6 +49,8 @@ export default function GerenciarEspacosScreen() {
   };
 
   const startEdit = (spaceId: string, currentName: string) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     setEditingSpaceId(spaceId);
     setEditName(currentName);
   };
@@ -127,7 +131,7 @@ export default function GerenciarEspacosScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, width: '100%', marginHorizontal: 'auto' },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { fontSize: theme.typography.sizes.headlineMd, fontWeight: 'bold', color: theme.colors.textPrimary },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Platform, Alert, TouchableOpacity, Share } from 'react-native';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import * as Clipboard from 'expo-clipboard';
 import { Feather } from '@expo/vector-icons';
 import { Card } from '../../src/components/ui/Card';
@@ -19,6 +19,8 @@ type Member = {
 }
 
 export default function MembersScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { activeGroup } = useGroup();
   const { user } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
@@ -151,7 +153,7 @@ export default function MembersScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg },
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.lg },
   inviteCard: { padding: theme.spacing.xl, marginBottom: theme.spacing.xl, backgroundColor: theme.colors.primary + '10' },

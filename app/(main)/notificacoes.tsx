@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { supabase } from '../../src/services/supabase';
 import { useAuth } from '../../src/store/auth';
 import { Card } from '../../src/components/ui/Card';
@@ -8,6 +8,8 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 export default function NotificacoesScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { user } = useAuth();
   const router = useRouter();
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -115,7 +117,7 @@ export default function NotificacoesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, width: '100%', marginHorizontal: 'auto' },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: theme.spacing.xl },
   title: { fontSize: theme.typography.sizes.headlineMd, fontWeight: 'bold', color: theme.colors.textPrimary },

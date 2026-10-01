@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { supabase } from '../../src/services/supabase';
 import { useGroup } from '../../src/store/group';
 import { Card } from '../../src/components/ui/Card';
 import { Feather } from '@expo/vector-icons';
 
 export default function HistoricoScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { activeGroup } = useGroup();
   const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,6 +54,8 @@ export default function HistoricoScreen() {
   }, [activeGroup]);
 
   const getActionText = (action: string, entityType: string) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     const typeNames: Record<string, string> = {
       'task': 'uma tarefa',
       'idea': 'uma ideia',
@@ -72,6 +76,8 @@ export default function HistoricoScreen() {
   };
 
   const getActionIcon = (action: string) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     switch (action) {
       case 'created': return <Feather name="plus-circle" size={16} color={theme.colors.primary} />;
       case 'completed': return <Feather name="check-circle" size={16} color={theme.colors.secondary} />;
@@ -122,7 +128,7 @@ export default function HistoricoScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, width: '100%', marginHorizontal: 'auto' },
   title: { fontSize: theme.typography.sizes.headlineMd, fontWeight: 'bold', color: theme.colors.textPrimary },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, marginBottom: theme.spacing.xl, marginTop: theme.spacing.xs },

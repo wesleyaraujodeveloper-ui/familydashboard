@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { theme } from '../../../src/theme';
+import { useAppTheme } from '../../../src/theme/useAppTheme';
 import { useGroup } from '../../../src/store/group';
 import { Card } from '../../../src/components/ui/Card';
 import { Button } from '../../../src/components/ui/Button';
@@ -10,6 +10,8 @@ import { Comments } from '../../../src/components/Comments';
 import { supabase } from '../../../src/services/supabase';
 
 export default function TarefaDetailsScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { activeGroup } = useGroup();
@@ -144,7 +146,7 @@ export default function TarefaDetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, marginHorizontal: 'auto', width: '100%' },
   card: { padding: theme.spacing.xl, marginBottom: theme.spacing.md },
   cardCompleted: { opacity: 0.7, backgroundColor: theme.colors.surfaceSubdued },

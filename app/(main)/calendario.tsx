@@ -4,7 +4,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Card } from '../../src/components/ui/Card';
 import { useSpace } from '../../src/store/space';
 import { supabase } from '../../src/services/supabase';
@@ -32,6 +32,8 @@ type CalendarItem = {
 };
 
 export default function CalendarioScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const { spaces } = useSpace();
   
@@ -62,6 +64,8 @@ export default function CalendarioScreen() {
     const getSpaceName = (id: string) => spaces.find(s => s.id === id)?.name || 'Desconhecido';
 
     const processEntity = (res: any, type: string, dateField: string = 'due_date') => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
       if (!res.error && res.data) {
         res.data.forEach((item: any) => {
           if (item[dateField]) {
@@ -147,6 +151,8 @@ export default function CalendarioScreen() {
   });
 
   const renderItem = (item: CalendarItem) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     if (item.type === 'event') {
       return (
         <Card style={[styles.baseCard, { padding: theme.spacing.md }]} key={'event' + item.id}>
@@ -267,7 +273,7 @@ export default function CalendarioScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1 },
   header: { padding: theme.spacing.lg, paddingBottom: 0, paddingTop: theme.spacing.xl },
   title: { fontSize: 32, fontWeight: '900', color: '#ffffff', marginBottom: theme.spacing.xs, textShadowColor: 'rgba(0,0,0,0.1)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 },

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { theme } from '../../../src/theme';
+import { useAppTheme } from '../../../src/theme/useAppTheme';
 import { useGroup } from '../../../src/store/group';
 import { Card } from '../../../src/components/ui/Card';
 import { Button } from '../../../src/components/ui/Button';
@@ -9,6 +9,8 @@ import { Comments } from '../../../src/components/Comments';
 import { supabase } from '../../../src/services/supabase';
 
 export default function CompromissoDetailsScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { activeGroup } = useGroup();
@@ -33,6 +35,8 @@ export default function CompromissoDetailsScreen() {
   }, [id]);
 
   const handleDelete = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     if (Platform.OS === 'web') {
       if (window.confirm('Excluir Compromisso? Tem certeza que deseja apagar?')) {
         supabase.from('events').delete().eq('id', id).then(() => {
@@ -74,7 +78,7 @@ export default function CompromissoDetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, padding: theme.spacing.lg, maxWidth: 600, marginHorizontal: 'auto', width: '100%' },
   card: { padding: theme.spacing.xl, marginBottom: theme.spacing.md },
   title: { fontSize: theme.typography.sizes.headlineMd, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.sm },

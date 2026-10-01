@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Card } from '../../src/components/ui/Card';
 import { useSpace } from '../../src/store/space';
 import { supabase } from '../../src/services/supabase';
@@ -21,6 +21,8 @@ type MyDayItem = {
 };
 
 export default function MeuDiaScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const { spaces } = useSpace();
   const [items, setItems] = useState<MyDayItem[]>([]);
@@ -83,6 +85,8 @@ export default function MeuDiaScreen() {
 
     // Helpers genéricos para Notices, Lists, Ideas (tudo tem due_date agora)
     const processGenericEntity = (res: any, type: string) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
       if (!res.error && res.data) {
         res.data.forEach((item: any) => {
           if (item.due_date) {
@@ -118,6 +122,8 @@ export default function MeuDiaScreen() {
   );
 
   const renderItem = (item: MyDayItem) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     if (item.type === 'event') {
       const dateObj = new Date(item.start_time!);
       const formattedTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -208,7 +214,7 @@ export default function MeuDiaScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.background },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { padding: theme.spacing.lg, paddingBottom: 0 },

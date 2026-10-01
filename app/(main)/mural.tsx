@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Modal, useWindowDimensions, Platform, Image, Alert } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { theme } from '../../src/theme';
+import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Card } from '../../src/components/ui/Card';
 import { Button } from '../../src/components/ui/Button';
 import { useSpace } from '../../src/store/space';
@@ -31,6 +31,8 @@ type BoardColumns = {
 const STATUS_ORDER = ['todo', 'in_progress', 'waiting', 'done'];
 
 export default function MuralScreen() {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const router = useRouter();
   const { activeSpace } = useSpace();
   const { width } = useWindowDimensions();
@@ -112,12 +114,16 @@ export default function MuralScreen() {
   };
 
   const renderCardFooter = (item: FeedItem) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     const currentIndex = STATUS_ORDER.indexOf(item.status);
     const canMoveLeft = currentIndex > 0;
     const canMoveRight = currentIndex < STATUS_ORDER.length - 1;
 
     const handleDelete = async () => {
       const confirmDelete = () => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
         return new Promise((resolve) => {
           if (Platform.OS === 'web') {
             resolve(window.confirm('Tem certeza que deseja excluir?'));
@@ -171,6 +177,8 @@ export default function MuralScreen() {
   };
 
   const renderCard = (item: FeedItem) => {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
     if (item.type === 'notice') {
       return (
         <TouchableOpacity key={item.id + 'notice'} onPress={() => router.push(`/(main)/recado/${item.id}` as any)} activeOpacity={0.8}>
@@ -401,7 +409,7 @@ export default function MuralScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f6f8' },
   header: { padding: theme.spacing.lg, paddingBottom: 0, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.spacing.lg, flexWrap: 'wrap', gap: 16 },
   headerActions: { flexDirection: 'row', gap: theme.spacing.sm },

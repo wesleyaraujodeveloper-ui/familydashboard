@@ -40,6 +40,11 @@ export const darkColors = {
   textMuted: '#6B7280',
   primary: '#E7826B',
   secondary: '#69978B',
+  tertiary: '#D19C34',
+  accentSky: '#547B9E',
+  error: '#FF6B6B',
+  success: '#69978B',
+  warning: '#D19C34',
 };
 
 export const typography = {
