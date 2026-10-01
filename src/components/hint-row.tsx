@@ -12,7 +12,6 @@ type HintRowProps = {
 };
 
 export function HintRow({ title = 'Try editing', hint = 'app/index.tsx' }: HintRowProps) {
-  const theme = useAppTheme();
   return (
     <View style={styles.stepRow}>
       <ThemedText type="small">{title}</ThemedText>

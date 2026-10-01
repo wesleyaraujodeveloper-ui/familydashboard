@@ -6,7 +6,6 @@ import classes from './animated-icon.module.css';
 const DURATION = 300;
 
 export function AnimatedSplashOverlay() {
-  const theme = useAppTheme();
   return null;
 }
 
@@ -56,7 +55,6 @@ const glowKeyframe = new Keyframe({
 });
 
 export function AnimatedIcon() {
-  const theme = useAppTheme();
   return (
     <View style={styles.iconContainer}>
       <Animated.View entering={glowKeyframe.duration(60 * 1000 * 4)} style={styles.glow}>

@@ -9,7 +9,6 @@ const INITIAL_SCALE_FACTOR = Dimensions.get('screen').height / 90;
 const DURATION = 600;
 
 export function AnimatedSplashOverlay() {
-  const theme = useAppTheme();
   const [animate, setAnimate] = useState(false);
   const [visible, setVisible] = useState(true);
 
@@ -97,7 +96,6 @@ const glowKeyframe = new Keyframe({
 });
 
 export function AnimatedIcon() {
-  const theme = useAppTheme();
   return (
     <View style={styles.iconContainer}>
       <Animated.View entering={glowKeyframe.duration(60 * 1000 * 4)} style={styles.glow}>
