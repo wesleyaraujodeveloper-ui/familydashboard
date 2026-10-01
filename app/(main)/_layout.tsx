@@ -309,12 +309,12 @@ export default function MainLayout() {
 
 const getStyles = (theme: any) => StyleSheet.create({
   // Desktop
-  desktopContainer: { flex: 1, flexDirection: 'row', backgroundColor: '#F1F5F9' },
+  desktopContainer: { flex: 1, flexDirection: 'row', backgroundColor: theme.colors.border },
   sidebar: { 
     width: 260, 
-    backgroundColor: '#ffffff', 
+    backgroundColor: theme.colors.surface, 
     borderRightWidth: 1, 
-    borderColor: '#E2E8F0', 
+    borderColor: theme.colors.border, 
     padding: theme.spacing.lg 
   },
   
@@ -323,24 +323,24 @@ const getStyles = (theme: any) => StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'space-between', 
     padding: 12,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: theme.colors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: theme.colors.border,
     marginBottom: 8
   },
   groupIcon: {
     width: 32, height: 32, borderRadius: 10, backgroundColor: theme.colors.primary, justifyContent: 'center', alignItems: 'center'
   },
-  logo: { fontSize: 16, fontWeight: '800', color: '#1E293B' },
+  logo: { fontSize: 16, fontWeight: '800', color: theme.colors.textPrimary },
   
   groupDropdown: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.surface,
     borderRadius: 16,
     padding: 8,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: theme.colors.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -364,7 +364,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     gap: 12
   },
   navItemActive: {
-    backgroundColor: '#FFF1F2',
+    backgroundColor: theme.colors.surfaceSubdued,
   },
   navText: {
     fontSize: 15,
@@ -388,7 +388,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     marginBottom: 2
   },
   spaceLinkActive: { 
-    backgroundColor: '#F1F5F9'
+    backgroundColor: theme.colors.border
   },
   spaceLinkText: {
     fontSize: 15,
@@ -417,7 +417,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     marginBottom: 24,
     paddingTop: 24,
     borderTopWidth: 1,
-    borderColor: '#F1F5F9'
+    borderColor: theme.colors.border
   },
   sidebarMemberItem: {
     flexDirection: 'row',
@@ -428,31 +428,31 @@ const getStyles = (theme: any) => StyleSheet.create({
   },
   sidebarMemberName: {
     fontSize: 14,
-    color: '#1E293B',
+    color: theme.colors.textPrimary,
     fontWeight: '700'
   },
   sidebarMemberRole: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: theme.colors.textMuted,
     fontWeight: '500'
   },
   
   footerLinks: {
     paddingTop: 24,
     borderTopWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: theme.colors.border,
     gap: 4
   },
 
   // Mobile
-  mobileContainer: { flex: 1, backgroundColor: '#F8FAFC' },
-  bottomTabs: { height: 75, flexDirection: 'row', backgroundColor: '#ffffff', borderTopWidth: 1, borderColor: '#F1F5F9', alignItems: 'center', justifyContent: 'space-around', paddingBottom: 16, paddingTop: 8 },
+  mobileContainer: { flex: 1, backgroundColor: theme.colors.background },
+  bottomTabs: { height: 75, flexDirection: 'row', backgroundColor: theme.colors.surface, borderTopWidth: 1, borderColor: theme.colors.border, alignItems: 'center', justifyContent: 'space-around', paddingBottom: 16, paddingTop: 8 },
   tabItemContainer: { alignItems: 'center', justifyContent: 'center', flex: 1, gap: 4 },
   tabItem: { fontSize: 11, color: '#94A3B8', fontWeight: '700' },
   
   // Shared
   mainArea: { flex: 1 },
-  header: { height: 70, backgroundColor: '#ffffff', borderBottomWidth: 1, borderColor: '#F1F5F9', justifyContent: 'center', paddingHorizontal: theme.spacing.lg },
+  header: { height: 70, backgroundColor: theme.colors.surface, borderBottomWidth: 1, borderColor: theme.colors.border, justifyContent: 'center', paddingHorizontal: theme.spacing.lg },
   headerTitle: { fontSize: 18, fontWeight: '800', color: '#0F172A' },
   content: { flex: 1 },
 });

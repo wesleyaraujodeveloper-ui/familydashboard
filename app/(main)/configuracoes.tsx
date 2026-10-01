@@ -80,7 +80,7 @@ export default function SettingsScreen() {
             value={isDarkMode} 
             onValueChange={toggleTheme}
             trackColor={{ false: theme.colors.border, true: theme.colors.primary }}
-            thumbColor={isDarkMode ? '#fff' : '#f4f3f4'}
+            thumbColor={isDarkMode ? theme.colors.surface : '#f4f3f4'}
           />
         </View>
       </Card>
@@ -123,13 +123,13 @@ export default function SettingsScreen() {
 }
 
 const getStyles = (theme: any) => StyleSheet.create({
-  container: { flex: 1, padding: theme.spacing.lg },
+  container: { flex: 1, padding: theme.spacing.lg, backgroundColor: theme.colors.background },
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.lg },
   card: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, maxWidth: 600 },
   sectionTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '600', color: theme.colors.textPrimary, marginBottom: theme.spacing.sm },
   text: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, marginBottom: 4 },
   brandContainer: { alignItems: 'center', marginTop: theme.spacing.xxxl, paddingVertical: theme.spacing.xl, opacity: 0.8 },
-  brandLogoWrapper: { width: 100, height: 100, borderRadius: 30, overflow: 'hidden', marginBottom: theme.spacing.md, backgroundColor: '#fff', elevation: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8 },
+  brandLogoWrapper: { width: 100, height: 100, borderRadius: 30, overflow: 'hidden', marginBottom: theme.spacing.md, backgroundColor: theme.colors.surface, elevation: 2, shadowColor: theme.colors.textPrimary, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8 },
   brandLogo: { width: '100%', height: '100%', transform: [{ scale: 1.35 }] },
   brandText: { fontSize: theme.typography.sizes.bodyMd, color: theme.colors.textSecondary, fontWeight: 'bold' }
 });
