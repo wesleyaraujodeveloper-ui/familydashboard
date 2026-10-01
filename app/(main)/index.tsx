@@ -110,7 +110,7 @@ export default function OverviewScreen() {
   const firstName = profile?.name ? profile.name.split(' ')[0] : 'Usuário';
 
   const gradientColors = (theme.isDarkMode 
-    ? ['#201025', '#161625', '#0E0F12']
+    ? ['#2E1534', '#151733', '#0C0F1A']
     : ['#FCE7F3', '#E0E7FF', '#E0F2FE']) as readonly [string, string, string];
 
   return (
@@ -124,7 +124,7 @@ export default function OverviewScreen() {
               <View style={styles.dot} />
               <Text style={styles.badgeText}>Lar & Equipe</Text>
             </View>
-            <Text style={styles.greeting}>{getGreeting()}, {firstName}! ✨</Text>
+            <Text style={styles.greeting}>{getGreeting()},{'\n'}{firstName}! ✨</Text>
             <Text style={styles.subGreeting}>Vamos organizar o dia da família juntos.</Text>
           </View>
           <View style={styles.avatarWrapper}>
@@ -366,7 +366,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: theme.isDarkMode ? 'rgba(236, 72, 153, 0.15)' : 'rgba(255, 255, 255, 0.6)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -382,7 +382,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   },
   badgeText: {
     fontSize: 12,
-    color: '#831843',
+    color: theme.isDarkMode ? '#F472B6' : '#831843',
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5
@@ -390,13 +390,13 @@ const getStyles = (theme: any) => StyleSheet.create({
   greeting: {
     fontSize: 34,
     fontWeight: '900',
-    color: '#1E1B4B',
+    color: theme.isDarkMode ? '#FFFFFF' : '#1E1B4B',
     letterSpacing: -1,
     marginBottom: 6
   },
   subGreeting: {
     fontSize: 16,
-    color: '#4F46E5',
+    color: theme.isDarkMode ? '#A78BFA' : '#4F46E5',
     opacity: 0.8,
     lineHeight: 22,
     fontWeight: '500'
@@ -404,7 +404,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   avatarWrapper: {
     position: 'relative',
     padding: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.4)',
     borderRadius: 99
   },
   notificationDot: {
@@ -416,12 +416,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     backgroundColor: '#EF4444',
     borderRadius: 7,
     borderWidth: 2,
-    borderColor: '#FCE7F3'
+    borderColor: theme.isDarkMode ? '#1F1235' : '#FCE7F3'
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1E1B4B',
+    color: theme.isDarkMode ? '#FFFFFF' : '#1E1B4B',
     marginBottom: 16,
     marginLeft: 4
   },
@@ -452,7 +452,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   quickActionLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#4338CA'
+    color: theme.isDarkMode ? '#E2E8F0' : '#4338CA'
   },
   grid: {
     flexDirection: 'row',
@@ -461,12 +461,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     marginBottom: 20
   },
   expandedPanel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: theme.isDarkMode ? '#191924' : 'rgba(255, 255, 255, 0.7)',
     borderRadius: 24,
     padding: 16,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.9)',
+    borderColor: theme.isDarkMode ? '#2D2D44' : 'rgba(255, 255, 255, 0.9)',
   },
   expandedTitle: {
     fontSize: 14,
@@ -519,10 +519,10 @@ const getStyles = (theme: any) => StyleSheet.create({
     margin: 8,
     padding: 20,
     borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: theme.isDarkMode ? '#191924' : 'rgba(255, 255, 255, 0.7)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.9)',
-    shadowColor: '#4F46E5',
+    borderColor: theme.isDarkMode ? '#2D2D44' : 'rgba(255, 255, 255, 0.9)',
+    shadowColor: theme.isDarkMode ? '#000' : '#4F46E5',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.05,
     shadowRadius: 20,
@@ -562,11 +562,11 @@ const getStyles = (theme: any) => StyleSheet.create({
   valNum: {
     fontSize: 32,
     fontWeight: '900',
-    color: '#1E1B4B',
+    color: theme.isDarkMode ? '#FFFFFF' : '#1E1B4B',
   },
   valLabel: {
     fontSize: 13,
-    color: '#6366F1',
+    color: theme.isDarkMode ? '#818CF8' : '#6366F1',
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -574,7 +574,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    color: '#475569',
+    color: theme.isDarkMode ? '#94A3B8' : '#475569',
     fontWeight: '500'
   },
   progressTrack: {
