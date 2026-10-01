@@ -99,7 +99,7 @@ export default function MainLayout() {
           <View style={styles.mainNav}>
             <SidebarLink href="/(main)" icon="home" label="Início" isActive={pathname === '/'} />
             <SidebarLink href="/(main)/meu-dia" icon="sun" label="Meu Dia" isActive={pathname === '/meu-dia'} />
-            <SidebarLink href="/(main)/calendario" icon="calendar" label="Calendário" isActive={pathname === '/calendario'} />
+            <SidebarLink href="/(main)/calendario" icon="calendar" label="Agenda" isActive={pathname === '/calendario'} />
           </View>
 
           <View style={styles.spaceSection}>
@@ -218,7 +218,7 @@ export default function MainLayout() {
             <View style={styles.mainNav}>
               <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)' as any); }} icon="home" label="Início" isActive={pathname === '/'} />
               <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/meu-dia' as any); }} icon="sun" label="Meu Dia" isActive={pathname === '/meu-dia'} />
-              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/calendario' as any); }} icon="calendar" label="Calendário" isActive={pathname === '/calendario'} />
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/calendario' as any); }} icon="calendar" label="Agenda" isActive={pathname === '/calendario'} />
             </View>
 
             <View style={styles.spaceSection}>

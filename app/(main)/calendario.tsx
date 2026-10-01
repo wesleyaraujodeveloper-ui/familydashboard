@@ -252,7 +252,7 @@ export default function CalendarioScreen() {
       <View style={styles.header}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
           <View style={{flex: 1}}>
-            <Text style={styles.title}>📅 Calendário</Text>
+            <Text style={styles.title}>📅 Agenda</Text>
             <Text style={styles.subtitle}>Visão geral dos seus compromissos e prazos</Text>
           </View>
           <TouchableOpacity 
