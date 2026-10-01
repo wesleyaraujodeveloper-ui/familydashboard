@@ -74,9 +74,9 @@ export default function MainLayout() {
         {/* SIDEBAR DESKTOP */}
         <View style={styles.sidebar}>
           <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={styles.groupSwitcherBtn}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 8 }}>
               <View style={styles.groupIcon}><Feather name="users" size={16} color="#fff" /></View>
-              <Text style={styles.logo}>{activeGroup?.name || 'Mural'}</Text>
+              <Text style={[styles.logo, { flexShrink: 1 }]} numberOfLines={1}>{activeGroup?.name || 'Mural'}</Text>
             </View>
             <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.textSecondary} />
           </TouchableOpacity>
@@ -194,9 +194,9 @@ export default function MainLayout() {
           <View style={{ width: 300, backgroundColor: theme.colors.surface, height: '100%', padding: theme.spacing.lg, paddingTop: 60, elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10 }}>
             
             <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={styles.groupSwitcherBtn}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 8 }}>
                 <View style={styles.groupIcon}><Feather name="users" size={16} color="#fff" /></View>
-                <Text style={styles.logo}>{activeGroup?.name || 'Mural'}</Text>
+                <Text style={[styles.logo, { flexShrink: 1 }]} numberOfLines={1}>{activeGroup?.name || 'Mural'}</Text>
               </View>
               <Feather name={showGroupSwitcher ? "chevron-up" : "chevron-down"} size={20} color={theme.colors.textSecondary} />
             </TouchableOpacity>
@@ -453,6 +453,6 @@ const getStyles = (theme: any) => StyleSheet.create({
   // Shared
   mainArea: { flex: 1 },
   header: { height: 70, backgroundColor: theme.colors.surface, borderBottomWidth: 1, borderColor: theme.colors.border, justifyContent: 'center', paddingHorizontal: theme.spacing.lg },
-  headerTitle: { fontSize: 18, fontWeight: '800', color: '#0F172A' },
+  headerTitle: { fontSize: 18, fontWeight: '800', color: theme.colors.textPrimary },
   content: { flex: 1 },
 });
