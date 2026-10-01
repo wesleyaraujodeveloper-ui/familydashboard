@@ -141,6 +141,6 @@ const getStyles = (theme: any) => StyleSheet.create({
   spaceName: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textPrimary, fontWeight: '500' },
   actions: { flexDirection: 'row' },
   editRow: { flexDirection: 'row', alignItems: 'center' },
-  editInput: { flex: 1, borderWidth: 1, borderColor: theme.colors.primary, borderRadius: 8, padding: 8, fontSize: 16, backgroundColor: 'white', marginRight: 8 },
+  editInput: { flex: 1, borderWidth: 1, borderColor: theme.colors.primary, borderRadius: 8, padding: 8, fontSize: 16, backgroundColor: theme.colors.surface, marginRight: 8 },
   iconButton: { padding: 8, marginLeft: 8, borderRadius: 8, backgroundColor: '#f0f2f5' }
 });

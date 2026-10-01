@@ -29,22 +29,22 @@ export const colors = {
 };
 
 export const darkColors = {
-  // Dark Mode equivalents
-  surface: '#1E1F24',
-  surfaceSubdued: '#131417',
-  background: '#0E0F12',
-  border: '#272932',
-  borderSubtle: '#1C1D22',
-  textPrimary: '#F3F4F6',
-  textSecondary: '#9CA3AF',
-  textMuted: '#6B7280',
-  primary: '#E7826B',
-  secondary: '#69978B',
-  tertiary: '#D19C34',
-  accentSky: '#547B9E',
-  error: '#FF6B6B',
-  success: '#69978B',
-  warning: '#D19C34',
+  // Dark Mode equivalents (ZenZ Vibe)
+  surface: '#1B1C31',
+  surfaceSubdued: '#131422',
+  background: '#0C0F1A',
+  border: '#2A1738',
+  borderSubtle: '#1E1F35',
+  textPrimary: '#F8FAFC',
+  textSecondary: '#94A3B8',
+  textMuted: '#64748B',
+  primary: '#EC4899',
+  secondary: '#8B5CF6',
+  tertiary: '#38BDF8',
+  accentSky: '#818CF8',
+  error: '#F43F5E',
+  success: '#10B981',
+  warning: '#F59E0B',
 };
 
 export const typography = {

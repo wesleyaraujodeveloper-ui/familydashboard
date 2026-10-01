@@ -215,7 +215,7 @@ export default function CriarTarefaScreen() {
 
       <Modal visible={showCalendar} transparent={true} animationType="fade">
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 20 }}>
-          <View style={{ backgroundColor: 'white', borderRadius: 12, padding: 10, overflow: 'hidden' }}>
+          <View style={{ backgroundColor: theme.colors.surface, borderRadius: 12, padding: 10, overflow: 'hidden' }}>
             <Calendar
               onDayPress={(day: any) => {
                 const parts = day.dateString.split('-');
