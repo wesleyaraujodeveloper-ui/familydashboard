@@ -15,6 +15,7 @@ type FeedItem = {
   description?: string;
   text?: string;
   status: string; // Now guaranteed by universal status
+  due_date?: string;
   priority?: string;
   start_time?: string;
   image_url?: string;
@@ -236,9 +237,18 @@ export default function MuralScreen() {
         <Card elevation="level1" style={[styles.baseCard, styles.taskCard, item.status === 'done' && styles.taskCardCompleted]}>
           {item.image_url ? <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" /> : null}
           <View style={styles.taskHeader}>
-            <Text style={[styles.taskTitle, item.status === 'done' && styles.taskTitleCompleted]}>✅ {item.title}</Text>
-            <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
-              <Text style={styles.badgeText}>{item.priority}</Text>
+            <Text style={[styles.taskTitle, item.status === 'done' && styles.taskTitleCompleted]} numberOfLines={2}>✅ {item.title}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              {item.priority && (
+                <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
+                  <Text style={[styles.badgeText, (styles as any)[`priority_${item.priority}_text`]]}>{item.priority === 'high' ? 'Alta' : item.priority === 'medium' ? 'Média' : item.priority === 'low' ? 'Baixa' : item.priority}</Text>
+                </View>
+              )}
+              {item.due_date && new Date(item.due_date) < new Date() && item.status !== 'done' && (
+                <View style={styles.overdueBadge}>
+                  <Text style={styles.overdueText}>ATRASADO</Text>
+                </View>
+              )}
             </View>
           </View>
           {item.description ? <Text style={styles.taskDesc} numberOfLines={2}>{item.description}</Text> : null}
@@ -462,6 +472,8 @@ const getStyles = (theme: any) => StyleSheet.create({
   priority_medium_text: { color: '#B45309' },
   priority_low: { backgroundColor: '#E0E7FF' },
   priority_low_text: { color: '#4338CA' },
+  overdueBadge: { backgroundColor: theme.isDarkMode ? '#3f0f14' : '#FFE4E6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 6 },
+  overdueText: { fontSize: 9, fontWeight: 'bold', color: theme.isDarkMode ? '#FDA4AF' : '#E11D48', textTransform: 'uppercase' },
   
   noticeCard: { 
     backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fff3e0',

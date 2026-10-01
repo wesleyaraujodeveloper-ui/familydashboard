@@ -173,11 +173,18 @@ export default function MeuDiaScreen() {
           <Card elevation="level1" style={styles.taskCard}>
             <View style={styles.taskHeader}>
               <Text style={styles.itemTitle}>✅ {item.title}</Text>
-              {item.priority && (
-                <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
-                  <Text style={styles.badgeText}>{item.priority}</Text>
-                </View>
-              )}
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                {item.priority && (
+                  <View style={[styles.badge, (styles as any)[`priority_${item.priority}`]]}>
+                    <Text style={[styles.badgeText, (styles as any)[`priority_${item.priority}_text`]]}>{item.priority === 'high' ? 'Alta' : item.priority === 'medium' ? 'Média' : item.priority === 'low' ? 'Baixa' : item.priority}</Text>
+                  </View>
+                )}
+                {item.due_date && new Date(item.due_date) < new Date() && item.status !== 'done' && (
+                  <View style={styles.overdueBadge}>
+                    <Text style={styles.overdueText}>ATRASADO</Text>
+                  </View>
+                )}
+              </View>
             </View>
             <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
           </Card>
@@ -289,4 +296,9 @@ const getStyles = (theme: any) => StyleSheet.create({
   priority_high: { backgroundColor: theme.colors.error },
   priority_medium: { backgroundColor: theme.colors.warning },
   priority_low: { backgroundColor: theme.colors.secondary },
+  priority_high_text: { color: '#B91C1C' },
+  priority_medium_text: { color: '#B45309' },
+  priority_low_text: { color: '#4338CA' },
+  overdueBadge: { backgroundColor: theme.isDarkMode ? '#3f0f14' : '#FFE4E6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 6 },
+  overdueText: { fontSize: 9, fontWeight: 'bold', color: theme.isDarkMode ? '#FDA4AF' : '#E11D48', textTransform: 'uppercase' },
 });
