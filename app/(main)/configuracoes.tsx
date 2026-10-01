@@ -40,8 +40,6 @@ export default function SettingsScreen() {
   };
 
   const handleDeleteGroup = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     Alert.alert('Zona de Perigo', 'Tem certeza que deseja EXCLUIR a família inteira e todas as tarefas?', [
       { text: 'Cancelar', style: 'cancel' },
       { text: 'Sim, Excluir Tudo', style: 'destructive', onPress: async () => {

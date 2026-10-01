@@ -45,8 +45,6 @@ export default function CriarCompromissoScreen() {
 
   // --- Máscaras ---
   const handleDateChange = (text: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     let raw = text.replace(/\D/g, ''); // Apenas números
     if (raw.length > 8) raw = raw.slice(0, 8); // Máximo 8 dígitos
     
@@ -60,8 +58,6 @@ export default function CriarCompromissoScreen() {
   };
 
   const handleTimeChange = (text: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     let raw = text.replace(/\D/g, '');
     if (raw.length > 4) raw = raw.slice(0, 4);
     

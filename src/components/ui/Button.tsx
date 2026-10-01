@@ -13,8 +13,6 @@ export const Button = ({ title, variant = 'primary', isLoading, icon, style, ...
   const theme = useAppTheme();
   const styles = getStyles(theme);
   const getContainerStyle = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     switch (variant) {
       case 'secondary':
         return styles.secondaryContainer;
@@ -27,8 +25,6 @@ export const Button = ({ title, variant = 'primary', isLoading, icon, style, ...
   };
 
   const getTextStyle = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     switch (variant) {
       case 'secondary':
         return styles.secondaryText;

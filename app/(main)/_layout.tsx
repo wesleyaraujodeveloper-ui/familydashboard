@@ -14,8 +14,6 @@ const SidebarLink = ({ href, icon, label, isActive, onPress }: any) => {
   const styles = getStyles(theme);
   const router = useRouter();
   const handlePress = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (onPress) onPress();
     else router.push(href);
   };

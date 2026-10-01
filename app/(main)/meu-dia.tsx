@@ -85,8 +85,6 @@ export default function MeuDiaScreen() {
 
     // Helpers genéricos para Notices, Lists, Ideas (tudo tem due_date agora)
     const processGenericEntity = (res: any, type: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
       if (!res.error && res.data) {
         res.data.forEach((item: any) => {
           if (item.due_date) {
@@ -122,8 +120,6 @@ export default function MeuDiaScreen() {
   );
 
   const renderItem = (item: MyDayItem) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (item.type === 'event') {
       const dateObj = new Date(item.start_time!);
       const formattedTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });

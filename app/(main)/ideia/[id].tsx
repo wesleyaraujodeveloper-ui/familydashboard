@@ -35,8 +35,6 @@ export default function IdeiaDetailsScreen() {
   }, [id]);
 
   const handleDelete = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (Platform.OS === 'web') {
       if (window.confirm('Excluir Ideia? Tem certeza que deseja apagar?')) {
         supabase.from('ideas').delete().eq('id', id).then(() => {

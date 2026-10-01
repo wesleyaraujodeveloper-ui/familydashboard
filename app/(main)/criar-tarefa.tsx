@@ -48,8 +48,6 @@ export default function CriarTarefaScreen() {
   };
 
   const handleDateChange = (text: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     let raw = text.replace(/\D/g, ''); 
     if (raw.length > 8) raw = raw.slice(0, 8); 
     let formatted = raw;

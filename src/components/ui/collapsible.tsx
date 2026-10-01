@@ -9,9 +9,10 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
+  const theme = useAppTheme();
+  const styles = getStyles(theme);
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
-  const styles = getStyles(theme);
 
   return (
     <ThemedView>

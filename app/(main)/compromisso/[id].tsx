@@ -35,8 +35,6 @@ export default function CompromissoDetailsScreen() {
   }, [id]);
 
   const handleDelete = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (Platform.OS === 'web') {
       if (window.confirm('Excluir Compromisso? Tem certeza que deseja apagar?')) {
         supabase.from('events').delete().eq('id', id).then(() => {

@@ -54,8 +54,6 @@ export default function HistoricoScreen() {
   }, [activeGroup]);
 
   const getActionText = (action: string, entityType: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     const typeNames: Record<string, string> = {
       'task': 'uma tarefa',
       'idea': 'uma ideia',
@@ -76,8 +74,6 @@ export default function HistoricoScreen() {
   };
 
   const getActionIcon = (action: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     switch (action) {
       case 'created': return <Feather name="plus-circle" size={16} color={theme.colors.primary} />;
       case 'completed': return <Feather name="check-circle" size={16} color={theme.colors.secondary} />;

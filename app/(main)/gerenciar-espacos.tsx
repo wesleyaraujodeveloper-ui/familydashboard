@@ -49,8 +49,6 @@ export default function GerenciarEspacosScreen() {
   };
 
   const startEdit = (spaceId: string, currentName: string) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     setEditingSpaceId(spaceId);
     setEditName(currentName);
   };

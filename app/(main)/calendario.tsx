@@ -64,8 +64,6 @@ export default function CalendarioScreen() {
     const getSpaceName = (id: string) => spaces.find(s => s.id === id)?.name || 'Desconhecido';
 
     const processEntity = (res: any, type: string, dateField: string = 'due_date') => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
       if (!res.error && res.data) {
         res.data.forEach((item: any) => {
           if (item[dateField]) {
@@ -151,8 +149,6 @@ export default function CalendarioScreen() {
   });
 
   const renderItem = (item: CalendarItem) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (item.type === 'event') {
       return (
         <Card style={[styles.baseCard, { padding: theme.spacing.md }]} key={'event' + item.id}>

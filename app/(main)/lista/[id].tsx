@@ -85,8 +85,6 @@ export default function ListaDetailsScreen() {
   };
 
   const handleDeleteList = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (typeof window !== 'undefined' && window.confirm) {
       if (window.confirm('Tem certeza que deseja apagar esta lista?')) {
         supabase.from('lists').delete().eq('id', id).then(() => {

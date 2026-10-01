@@ -114,16 +114,12 @@ export default function MuralScreen() {
   };
 
   const renderCardFooter = (item: FeedItem) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     const currentIndex = STATUS_ORDER.indexOf(item.status);
     const canMoveLeft = currentIndex > 0;
     const canMoveRight = currentIndex < STATUS_ORDER.length - 1;
 
     const handleDelete = async () => {
       const confirmDelete = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
         return new Promise((resolve) => {
           if (Platform.OS === 'web') {
             resolve(window.confirm('Tem certeza que deseja excluir?'));
@@ -177,8 +173,6 @@ export default function MuralScreen() {
   };
 
   const renderCard = (item: FeedItem) => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (item.type === 'notice') {
       return (
         <TouchableOpacity key={item.id + 'notice'} onPress={() => router.push(`/(main)/recado/${item.id}` as any)} activeOpacity={0.8}>

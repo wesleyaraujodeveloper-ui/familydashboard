@@ -35,8 +35,6 @@ export default function RecadoDetailsScreen() {
   }, [id]);
 
   const handleDelete = () => {
-  const theme = useAppTheme();
-  const styles = getStyles(theme);
     if (Platform.OS === 'web') {
       if (window.confirm('Excluir Recado? Tem certeza que deseja apagar?')) {
         supabase.from('notices').delete().eq('id', id).then(() => {
