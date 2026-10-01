@@ -224,17 +224,17 @@ const getStyles = (theme: any) => StyleSheet.create({
   emptyStateText: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, textAlign: 'center' },
 
   // Cards
-  taskCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#e8f5e9', borderLeftWidth: 4, borderLeftColor: '#4caf50' },
+  taskCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: theme.isDarkMode ? '#1E1F24' : '#e8f5e9', borderLeftWidth: 4, borderLeftColor: '#4caf50' },
   taskHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   itemTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: theme.colors.textPrimary, flex: 1, marginBottom: 4 },
   
-  eventCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, flexDirection: 'row', alignItems: 'center', backgroundColor: '#ffebee', borderLeftWidth: 4, borderLeftColor: '#f44336' },
+  eventCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, flexDirection: 'row', alignItems: 'center', backgroundColor: theme.isDarkMode ? '#1E1F24' : '#ffebee', borderLeftWidth: 4, borderLeftColor: '#f44336' },
   eventLeft: { paddingRight: theme.spacing.md, borderRightWidth: 1, borderColor: 'rgba(0,0,0,0.1)', marginRight: theme.spacing.md, alignItems: 'center', minWidth: 60 },
   eventTimeText: { fontSize: theme.typography.sizes.bodyLg, fontWeight: 'bold', color: theme.colors.textPrimary },
   
-  noticeCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#fff3e0', borderLeftWidth: 4, borderLeftColor: '#ff9800' },
-  listCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#e0f7fa', borderLeftWidth: 4, borderLeftColor: '#00bcd4' },
-  ideaCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: '#fffde7', borderLeftWidth: 4, borderLeftColor: '#ffeb3b' },
+  noticeCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fff3e0', borderLeftWidth: 4, borderLeftColor: '#ff9800' },
+  listCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: theme.isDarkMode ? '#1E1F24' : '#e0f7fa', borderLeftWidth: 4, borderLeftColor: '#00bcd4' },
+  ideaCard: { padding: theme.spacing.lg, marginBottom: theme.spacing.md, backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fffde7', borderLeftWidth: 4, borderLeftColor: '#ffeb3b' },
   
   itemRight: { flex: 1 },
   spaceBadge: { fontSize: theme.typography.sizes.bodySm, color: theme.colors.textSecondary, fontWeight: '500' },

@@ -228,8 +228,8 @@ export default function CalendarioScreen() {
             onDayPress={(day: any) => setSelectedDate(day.dateString)}
             markedDates={markedDates}
             theme={{
-              backgroundColor: '#ffffff',
-              calendarBackground: '#ffffff',
+              backgroundColor: theme.colors.surface,
+              calendarBackground: 'transparent',
               textSectionTitleColor: '#9CA3AF',
               selectedDayBackgroundColor: theme.colors.primary,
               selectedDayTextColor: '#ffffff',
@@ -275,7 +275,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   title: { fontSize: 32, fontWeight: '900', color: '#ffffff', marginBottom: theme.spacing.xs, textShadowColor: 'rgba(0,0,0,0.1)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: 'rgba(255,255,255,0.9)', marginBottom: theme.spacing.lg },
   
-  calendarContainer: { marginHorizontal: theme.spacing.lg, borderRadius: 24, overflow: 'hidden', elevation: 10, shadowColor: '#000', shadowOpacity: 0.15, shadowOffset: { width: 0, height: 10 }, shadowRadius: 20, backgroundColor: '#ffffff', marginBottom: theme.spacing.xl, paddingVertical: 10 },
+  calendarContainer: { marginHorizontal: theme.spacing.lg, borderRadius: 24, overflow: 'hidden', elevation: 10, shadowColor: '#000', shadowOpacity: 0.15, shadowOffset: { width: 0, height: 10 }, shadowRadius: 20, backgroundColor: theme.colors.surface, marginBottom: theme.spacing.xl, paddingVertical: 10 },
   
   agendaContainer: { paddingHorizontal: theme.spacing.lg, paddingBottom: 100 },
   agendaTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#ffffff', marginBottom: theme.spacing.md, textShadowColor: 'rgba(0,0,0,0.1)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 },
@@ -285,7 +285,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 
   // Base Card Style (ZenZ)
   baseCard: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.surface,
     borderRadius: 20,
     padding: theme.spacing.lg,
     marginBottom: theme.spacing.md,

@@ -165,7 +165,7 @@ export default function MuralScreen() {
           )}
         </View>
 
-        <TouchableOpacity onPress={handleDelete} style={[styles.arrowBtn, { backgroundColor: '#ffebee' }]}>
+        <TouchableOpacity onPress={handleDelete} style={[styles.arrowBtn, { backgroundColor: theme.isDarkMode ? '#1E1F24' : '#ffebee' }]}>
           <Feather name="trash-2" size={18} color={theme.colors.error} />
         </TouchableOpacity>
       </View>
@@ -354,35 +354,35 @@ export default function MuralScreen() {
             <ScrollView style={{ flexShrink: 1, marginVertical: theme.spacing.sm }} showsVerticalScrollIndicator={false}>
               <View style={styles.modalGrid}>
               <TouchableOpacity style={[styles.modalOption, { width: isDesktop ? '48%' : '100%' }]} onPress={() => { setIsAddModalOpen(false); router.push('/(main)/criar-tarefa' as any); }}>
-                <View style={[styles.modalIconBg, { backgroundColor: '#e8f5e9' }]}><Text style={styles.modalIcon}>✅</Text></View>
+                <View style={[styles.modalIconBg, { backgroundColor: theme.isDarkMode ? '#1E1F24' : '#e8f5e9' }]}><Text style={styles.modalIcon}>✅</Text></View>
                 <View style={styles.modalOptionTexts}>
                   <Text style={styles.modalOptionTitle}>Tarefa</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={[styles.modalOption, { width: isDesktop ? '48%' : '100%' }]} onPress={() => { setIsAddModalOpen(false); router.push('/(main)/criar-recado' as any); }}>
-                <View style={[styles.modalIconBg, { backgroundColor: '#fff3e0' }]}><Text style={styles.modalIcon}>📌</Text></View>
+                <View style={[styles.modalIconBg, { backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fff3e0' }]}><Text style={styles.modalIcon}>📌</Text></View>
                 <View style={styles.modalOptionTexts}>
                   <Text style={styles.modalOptionTitle}>Recado</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={[styles.modalOption, { width: isDesktop ? '48%' : '100%' }]} onPress={() => { setIsAddModalOpen(false); router.push('/(main)/criar-compromisso' as any); }}>
-                <View style={[styles.modalIconBg, { backgroundColor: '#ffebee' }]}><Text style={styles.modalIcon}>📅</Text></View>
+                <View style={[styles.modalIconBg, { backgroundColor: theme.isDarkMode ? '#1E1F24' : '#ffebee' }]}><Text style={styles.modalIcon}>📅</Text></View>
                 <View style={styles.modalOptionTexts}>
                   <Text style={styles.modalOptionTitle}>Compromisso</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={[styles.modalOption, { width: isDesktop ? '48%' : '100%' }]} onPress={() => { setIsAddModalOpen(false); router.push('/(main)/criar-lista' as any); }}>
-                <View style={[styles.modalIconBg, { backgroundColor: '#e0f7fa' }]}><Text style={styles.modalIcon}>📋</Text></View>
+                <View style={[styles.modalIconBg, { backgroundColor: theme.isDarkMode ? '#1E1F24' : '#e0f7fa' }]}><Text style={styles.modalIcon}>📋</Text></View>
                 <View style={styles.modalOptionTexts}>
                   <Text style={styles.modalOptionTitle}>Lista</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={[styles.modalOption, { width: isDesktop ? '48%' : '100%' }]} onPress={() => { setIsAddModalOpen(false); router.push('/(main)/criar-ideia' as any); }}>
-                <View style={[styles.modalIconBg, { backgroundColor: '#fffde7' }]}><Text style={styles.modalIcon}>💡</Text></View>
+                <View style={[styles.modalIconBg, { backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fffde7' }]}><Text style={styles.modalIcon}>💡</Text></View>
                 <View style={styles.modalOptionTexts}>
                   <Text style={styles.modalOptionTitle}>Ideia</Text>
                 </View>
@@ -404,7 +404,7 @@ export default function MuralScreen() {
 }
 
 const getStyles = (theme: any) => StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f6f8' },
+  container: { flex: 1, backgroundColor: theme.colors.background },
   header: { padding: theme.spacing.lg, paddingBottom: 0, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.spacing.lg, flexWrap: 'wrap', gap: 16 },
   headerActions: { flexDirection: 'row', gap: theme.spacing.sm },
   title: { fontSize: theme.typography.sizes.headlineLg, fontWeight: 'bold', color: theme.colors.textPrimary },
@@ -413,12 +413,12 @@ const getStyles = (theme: any) => StyleSheet.create({
   
   // Kanban Board
   boardScroll: { paddingHorizontal: theme.spacing.lg, paddingBottom: theme.spacing.xl, gap: 20, flexGrow: 1 },
-  boardColumn: { backgroundColor: '#F8FAFC', borderRadius: 24, padding: theme.spacing.md, flex: 1, borderWidth: 1, borderColor: '#F1F5F9' },
+  boardColumn: { backgroundColor: theme.isDarkMode ? '#131417' : '#F8FAFC', borderRadius: 24, padding: theme.spacing.md, flex: 1, borderWidth: 1, borderColor: theme.isDarkMode ? '#1C1D22' : '#F1F5F9' },
   columnHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: theme.spacing.md, paddingHorizontal: 4 },
   columnDot: { width: 12, height: 12, borderRadius: 6, marginRight: 10 },
-  columnTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '800', color: '#1E293B', flex: 1 },
-  columnCount: { backgroundColor: '#E2E8F0', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  columnCountText: { fontSize: 12, fontWeight: 'bold', color: '#475569' },
+  columnTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: '800', color: theme.colors.textPrimary, flex: 1 },
+  columnCount: { backgroundColor: theme.isDarkMode ? '#272932' : '#E2E8F0', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  columnCountText: { fontSize: 12, fontWeight: 'bold', color: theme.colors.textSecondary },
 
   cardFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing.md, paddingTop: theme.spacing.sm, borderTopWidth: 1, borderColor: 'rgba(0,0,0,0.05)' },
   arrowBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f2f5', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 },
@@ -429,7 +429,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   
   // Base Card Style
   baseCard: {
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.surface,
     borderRadius: 20,
     padding: theme.spacing.lg,
     marginBottom: theme.spacing.md,
@@ -443,7 +443,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   },
   
   taskCard: { 
-    backgroundColor: '#e8f5e9',
+    backgroundColor: theme.isDarkMode ? '#1E1F24' : '#e8f5e9',
     borderLeftWidth: 6,
     borderLeftColor: '#4caf50',
     borderColor: '#c8e6c9'
@@ -464,7 +464,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   priority_low_text: { color: '#4338CA' },
   
   noticeCard: { 
-    backgroundColor: '#fff3e0',
+    backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fff3e0',
     borderLeftWidth: 6,
     borderLeftColor: '#ff9800',
     borderColor: '#ffe0b2'
@@ -472,7 +472,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   noticeText: { fontSize: theme.typography.sizes.bodyLg, color: '#92400E', fontStyle: 'italic', lineHeight: 22 },
   
   eventCard: { 
-    backgroundColor: '#ffebee',
+    backgroundColor: theme.isDarkMode ? '#1E1F24' : '#ffebee',
     borderLeftWidth: 6,
     borderLeftColor: '#f44336',
     borderColor: '#ffcdd2'
@@ -494,7 +494,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   eventTimeText: { fontSize: theme.typography.sizes.titleMd, fontWeight: '900', color: '#991B1B' },
   
   listCard: { 
-    backgroundColor: '#e0f7fa',
+    backgroundColor: theme.isDarkMode ? '#1E1F24' : '#e0f7fa',
     borderLeftWidth: 6,
     borderLeftColor: '#00bcd4',
     borderColor: '#b2ebf2'
@@ -502,7 +502,7 @@ const getStyles = (theme: any) => StyleSheet.create({
   listTitle: { fontSize: theme.typography.sizes.titleMd, fontWeight: 'bold', color: '#166534' },
   
   ideaCard: { 
-    backgroundColor: '#fffde7',
+    backgroundColor: theme.isDarkMode ? '#1E1F24' : '#fffde7',
     borderLeftWidth: 6,
     borderLeftColor: '#ffeb3b',
     borderColor: '#fff9c4'
