@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Card } from '../../src/components/ui/Card';
 import { useSpace } from '../../src/store/space';
+import { useGroup } from '../../src/store/group';
 import { supabase } from '../../src/services/supabase';
 
 // PT-BR Calendar config
@@ -36,19 +37,42 @@ export default function CalendarioScreen() {
   const styles = getStyles(theme);
   const router = useRouter();
   const { spaces } = useSpace();
+  const { groups } = useGroup();
+  const [filterAllGroups, setFilterAllGroups] = useState(false);
   
   const [items, setItems] = useState<CalendarItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
   const fetchCalendar = useCallback(async () => {
-    if (!spaces || spaces.length === 0) {
-      setLoading(false);
-      return;
-    }
     setLoading(true);
 
-    const spaceIds = spaces.map(s => s.id);
+    let spaceIdsToFetch: string[] = [];
+    let allSpacesMap = new Map<string, string>();
+
+    if (filterAllGroups) {
+      const groupIds = groups.map(g => g.id);
+      if (groupIds.length > 0) {
+        const { data: allSpaces } = await supabase.from('spaces').select('id, name').in('group_id', groupIds);
+        if (allSpaces) {
+          spaceIdsToFetch = allSpaces.map(s => s.id);
+          allSpaces.forEach(s => allSpacesMap.set(s.id, s.name));
+        }
+      }
+    } else {
+      if (spaces && spaces.length > 0) {
+        spaceIdsToFetch = spaces.map(s => s.id);
+        spaces.forEach(s => allSpacesMap.set(s.id, s.name));
+      }
+    }
+
+    if (spaceIdsToFetch.length === 0) {
+      setLoading(false);
+      setItems([]);
+      return;
+    }
+
+    const spaceIds = spaceIdsToFetch;
 
     // Fetch tudo que tem data
     const [tasksRes, eventsRes, noticesRes, listsRes, ideasRes] = await Promise.all([
@@ -61,7 +85,7 @@ export default function CalendarioScreen() {
 
     const combined: CalendarItem[] = [];
 
-    const getSpaceName = (id: string) => spaces.find(s => s.id === id)?.name || 'Desconhecido';
+    const getSpaceName = (id: string) => allSpacesMap.get(id) || 'Desconhecido';
 
     const processEntity = (res: any, type: string, dateField: string = 'due_date') => {
       if (!res.error && res.data) {
@@ -94,7 +118,7 @@ export default function CalendarioScreen() {
 
     setItems(combined);
     setLoading(false);
-  }, [spaces]);
+  }, [spaces, groups, filterAllGroups]);
 
   useFocusEffect(
     useCallback(() => {
@@ -216,8 +240,19 @@ export default function CalendarioScreen() {
   return (
     <LinearGradient colors={['#FCA5A5', theme.colors.primary]} style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>📅 Calendário</Text>
-        <Text style={styles.subtitle}>Visão geral dos seus compromissos e prazos</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+          <View style={{flex: 1}}>
+            <Text style={styles.title}>📅 Calendário</Text>
+            <Text style={styles.subtitle}>Visão geral dos seus compromissos e prazos</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.filterBtn} 
+            onPress={() => setFilterAllGroups(!filterAllGroups)}
+          >
+            <Feather name={filterAllGroups ? "layers" : "folder"} size={16} color="#ffffff" />
+            <Text style={styles.filterBtnText}>{filterAllGroups ? "Todos os Grupos" : "Grupo Atual"}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -274,6 +309,9 @@ const getStyles = (theme: any) => StyleSheet.create({
   header: { padding: theme.spacing.lg, paddingBottom: 0, paddingTop: theme.spacing.xl },
   title: { fontSize: 32, fontWeight: '900', color: '#ffffff', marginBottom: theme.spacing.xs, textShadowColor: 'rgba(0,0,0,0.1)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: 'rgba(255,255,255,0.9)', marginBottom: theme.spacing.lg },
+  
+  filterBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16 },
+  filterBtnText: { fontSize: 12, fontWeight: 'bold', color: '#ffffff', marginLeft: 6 },
   
   calendarContainer: { marginHorizontal: theme.spacing.lg, borderRadius: 24, overflow: 'hidden', elevation: 10, shadowColor: '#000', shadowOpacity: 0.15, shadowOffset: { width: 0, height: 10 }, shadowRadius: 20, backgroundColor: theme.colors.surface, marginBottom: theme.spacing.xl, paddingVertical: 10 },
   

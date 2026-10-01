@@ -109,9 +109,9 @@ export default function OverviewScreen() {
 
   const firstName = profile?.name ? profile.name.split(' ')[0] : 'Usuário';
 
-  const gradientColors = theme.isDarkMode 
+  const gradientColors = (theme.isDarkMode 
     ? ['#201025', '#161625', '#0E0F12']
-    : ['#FCE7F3', '#E0E7FF', '#E0F2FE'];
+    : ['#FCE7F3', '#E0E7FF', '#E0F2FE']) as readonly [string, string, string];
 
   return (
     <LinearGradient colors={gradientColors} style={styles.mainContainer}>

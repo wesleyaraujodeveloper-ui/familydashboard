@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { useAppTheme } from '../../src/theme/useAppTheme';
 import { Card } from '../../src/components/ui/Card';
 import { useSpace } from '../../src/store/space';
+import { useGroup } from '../../src/store/group';
 import { supabase } from '../../src/services/supabase';
 
 type MyDayItem = {
@@ -25,17 +26,40 @@ export default function MeuDiaScreen() {
   const styles = getStyles(theme);
   const router = useRouter();
   const { spaces } = useSpace();
+  const { groups } = useGroup();
+  const [filterAllGroups, setFilterAllGroups] = useState(false);
   const [items, setItems] = useState<MyDayItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchMyDay = useCallback(async () => {
-    if (!spaces || spaces.length === 0) {
-      setLoading(false);
-      return;
-    }
     setLoading(true);
 
-    const spaceIds = spaces.map(s => s.id);
+    let spaceIdsToFetch: string[] = [];
+    let allSpacesMap = new Map<string, string>();
+
+    if (filterAllGroups) {
+      const groupIds = groups.map(g => g.id);
+      if (groupIds.length > 0) {
+        const { data: allSpaces } = await supabase.from('spaces').select('id, name').in('group_id', groupIds);
+        if (allSpaces) {
+          spaceIdsToFetch = allSpaces.map(s => s.id);
+          allSpaces.forEach(s => allSpacesMap.set(s.id, s.name));
+        }
+      }
+    } else {
+      if (spaces && spaces.length > 0) {
+        spaceIdsToFetch = spaces.map(s => s.id);
+        spaces.forEach(s => allSpacesMap.set(s.id, s.name));
+      }
+    }
+
+    if (spaceIdsToFetch.length === 0) {
+      setLoading(false);
+      setItems([]);
+      return;
+    }
+
+    const spaceIds = spaceIdsToFetch;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const endOfToday = new Date();
@@ -70,7 +94,7 @@ export default function MeuDiaScreen() {
         }
 
         if (shouldInclude) {
-          const spaceName = spaces.find(s => s.id === t.space_id)?.name || 'Desconhecido';
+          const spaceName = allSpacesMap.get(t.space_id) || 'Desconhecido';
           combined.push({ ...t, type: 'task', space_name: spaceName } as MyDayItem);
         }
       });
@@ -78,7 +102,7 @@ export default function MeuDiaScreen() {
 
     if (!eventsRes.error && eventsRes.data) {
       eventsRes.data.forEach(e => {
-        const spaceName = spaces.find(s => s.id === e.space_id)?.name || 'Desconhecido';
+        const spaceName = allSpacesMap.get(e.space_id) || 'Desconhecido';
         combined.push({ ...e, type: 'event', space_name: spaceName } as MyDayItem);
       });
     }
@@ -90,7 +114,7 @@ export default function MeuDiaScreen() {
           if (item.due_date) {
             const dueDate = new Date(item.due_date);
             if (dueDate <= endOfToday) {
-              const spaceName = spaces.find(s => s.id === item.space_id)?.name || 'Desconhecido';
+              const spaceName = allSpacesMap.get(item.space_id) || 'Desconhecido';
               combined.push({ ...item, type, space_name: spaceName, title: item.title || item.text } as MyDayItem);
             }
           }
@@ -111,7 +135,7 @@ export default function MeuDiaScreen() {
 
     setItems(combined);
     setLoading(false);
-  }, [spaces]);
+  }, [spaces, groups, filterAllGroups]);
 
   useFocusEffect(
     useCallback(() => {
@@ -187,8 +211,19 @@ export default function MeuDiaScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>🌞 Meu Dia</Text>
-        <Text style={styles.subtitle}>Sua visão geral de todas as tarefas e eventos de hoje</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+          <View style={{flex: 1}}>
+            <Text style={styles.title}>🌞 Meu Dia</Text>
+            <Text style={styles.subtitle}>Sua visão geral de todas as tarefas e eventos de hoje</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.filterBtn} 
+            onPress={() => setFilterAllGroups(!filterAllGroups)}
+          >
+            <Feather name={filterAllGroups ? "layers" : "folder"} size={16} color={theme.colors.primary} />
+            <Text style={styles.filterBtnText}>{filterAllGroups ? "Todos os Grupos" : "Grupo Atual"}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {loading ? (
@@ -216,6 +251,9 @@ const getStyles = (theme: any) => StyleSheet.create({
   header: { padding: theme.spacing.lg, paddingBottom: 0 },
   title: { fontSize: theme.typography.sizes.headlineXl, fontWeight: 'bold', color: theme.colors.textPrimary, marginBottom: theme.spacing.xs },
   subtitle: { fontSize: theme.typography.sizes.bodyLg, color: theme.colors.textSecondary, marginBottom: theme.spacing.lg },
+  
+  filterBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.surface, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, borderWidth: 1, borderColor: theme.colors.border },
+  filterBtnText: { fontSize: 12, fontWeight: 'bold', color: theme.colors.primary, marginLeft: 6 },
   
   feed: { flex: 1 },
   feedContent: { padding: theme.spacing.lg, paddingBottom: 40 },
