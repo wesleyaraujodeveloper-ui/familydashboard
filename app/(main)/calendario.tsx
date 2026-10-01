@@ -28,6 +28,7 @@ type CalendarItem = {
   time_formatted?: string;
   space_id: string;
   space_name?: string;
+  group_name?: string;
   priority?: string;
   status?: string;
 };
@@ -48,21 +49,21 @@ export default function CalendarioScreen() {
     setLoading(true);
 
     let spaceIdsToFetch: string[] = [];
-    let allSpacesMap = new Map<string, string>();
+    let allSpacesMap = new Map<string, {name: string, group_id: string}>();
 
     if (filterAllGroups) {
       const groupIds = groups.map(g => g.id);
       if (groupIds.length > 0) {
-        const { data: allSpaces } = await supabase.from('spaces').select('id, name').in('group_id', groupIds);
+        const { data: allSpaces } = await supabase.from('spaces').select('id, name, group_id').in('group_id', groupIds);
         if (allSpaces) {
           spaceIdsToFetch = allSpaces.map(s => s.id);
-          allSpaces.forEach(s => allSpacesMap.set(s.id, s.name));
+          allSpaces.forEach(s => allSpacesMap.set(s.id, { name: s.name, group_id: s.group_id }));
         }
       }
     } else {
       if (spaces && spaces.length > 0) {
         spaceIdsToFetch = spaces.map(s => s.id);
-        spaces.forEach(s => allSpacesMap.set(s.id, s.name));
+        spaces.forEach(s => allSpacesMap.set(s.id, { name: s.name, group_id: s.group_id }));
       }
     }
 
@@ -85,7 +86,8 @@ export default function CalendarioScreen() {
 
     const combined: CalendarItem[] = [];
 
-    const getSpaceName = (id: string) => allSpacesMap.get(id) || 'Desconhecido';
+    const getSpaceData = (id: string) => allSpacesMap.get(id);
+    const getGroupName = (groupId: string | undefined) => groups.find(g => g.id === groupId)?.name || 'Desconhecido';
 
     const processEntity = (res: any, type: string, dateField: string = 'due_date') => {
       if (!res.error && res.data) {
@@ -101,7 +103,8 @@ export default function CalendarioScreen() {
               date_iso: iso,
               time_formatted: type === 'event' ? time : undefined,
               space_id: item.space_id,
-              space_name: getSpaceName(item.space_id),
+              space_name: getSpaceData(item.space_id)?.name || 'Desconhecido',
+              group_name: getGroupName(getSpaceData(item.space_id)?.group_id),
               priority: item.priority,
               status: item.status
             });
@@ -182,7 +185,7 @@ export default function CalendarioScreen() {
             </View>
             <View style={styles.itemRight}>
               <Text style={styles.itemTitle}>📅 {item.title}</Text>
-              <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+              <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
             </View>
           </View>
         </Card>
@@ -201,7 +204,7 @@ export default function CalendarioScreen() {
                 </View>
               )}
             </View>
-            <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+            <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
           </Card>
         </TouchableOpacity>
       );
@@ -211,7 +214,7 @@ export default function CalendarioScreen() {
       return (
         <Card style={styles.baseCard} key={'notice' + item.id}>
           <Text style={styles.itemTitle}>📌 {item.title}</Text>
-          <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+          <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
         </Card>
       );
     }
@@ -221,7 +224,7 @@ export default function CalendarioScreen() {
         <TouchableOpacity key={'list' + item.id} onPress={() => router.push(`/(main)/lista/${item.id}` as any)} activeOpacity={0.8}>
           <Card style={styles.baseCard}>
             <Text style={styles.itemTitle}>📋 {item.title}</Text>
-            <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+            <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
           </Card>
         </TouchableOpacity>
       );
@@ -231,7 +234,7 @@ export default function CalendarioScreen() {
       return (
         <Card style={styles.baseCard} key={'idea' + item.id}>
           <Text style={styles.itemTitle}>💡 {item.title}</Text>
-          <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+          <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
         </Card>
       );
     }

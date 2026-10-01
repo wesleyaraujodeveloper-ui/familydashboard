@@ -19,6 +19,7 @@ type MyDayItem = {
   due_date?: string;
   space_id: string;
   space_name?: string;
+  group_name?: string;
 };
 
 export default function MeuDiaScreen() {
@@ -35,21 +36,21 @@ export default function MeuDiaScreen() {
     setLoading(true);
 
     let spaceIdsToFetch: string[] = [];
-    let allSpacesMap = new Map<string, string>();
+    let allSpacesMap = new Map<string, {name: string, group_id: string}>();
 
     if (filterAllGroups) {
       const groupIds = groups.map(g => g.id);
       if (groupIds.length > 0) {
-        const { data: allSpaces } = await supabase.from('spaces').select('id, name').in('group_id', groupIds);
+        const { data: allSpaces } = await supabase.from('spaces').select('id, name, group_id').in('group_id', groupIds);
         if (allSpaces) {
           spaceIdsToFetch = allSpaces.map(s => s.id);
-          allSpaces.forEach(s => allSpacesMap.set(s.id, s.name));
+          allSpaces.forEach(s => allSpacesMap.set(s.id, { name: s.name, group_id: s.group_id }));
         }
       }
     } else {
       if (spaces && spaces.length > 0) {
         spaceIdsToFetch = spaces.map(s => s.id);
-        spaces.forEach(s => allSpacesMap.set(s.id, s.name));
+        spaces.forEach(s => allSpacesMap.set(s.id, { name: s.name, group_id: s.group_id }));
       }
     }
 
@@ -94,16 +95,20 @@ export default function MeuDiaScreen() {
         }
 
         if (shouldInclude) {
-          const spaceName = allSpacesMap.get(t.space_id) || 'Desconhecido';
-          combined.push({ ...t, type: 'task', space_name: spaceName } as MyDayItem);
+          const spaceData = allSpacesMap.get(t.space_id);
+          const spaceName = spaceData?.name || 'Desconhecido';
+          const groupName = groups.find(g => g.id === spaceData?.group_id)?.name || 'Desconhecido';
+          combined.push({ ...t, type: 'task', space_name: spaceName, group_name: groupName } as MyDayItem);
         }
       });
     }
 
     if (!eventsRes.error && eventsRes.data) {
       eventsRes.data.forEach(e => {
-        const spaceName = allSpacesMap.get(e.space_id) || 'Desconhecido';
-        combined.push({ ...e, type: 'event', space_name: spaceName } as MyDayItem);
+        const spaceData = allSpacesMap.get(e.space_id);
+        const spaceName = spaceData?.name || 'Desconhecido';
+        const groupName = groups.find(g => g.id === spaceData?.group_id)?.name || 'Desconhecido';
+        combined.push({ ...e, type: 'event', space_name: spaceName, group_name: groupName } as MyDayItem);
       });
     }
 
@@ -114,8 +119,10 @@ export default function MeuDiaScreen() {
           if (item.due_date) {
             const dueDate = new Date(item.due_date);
             if (dueDate <= endOfToday) {
-              const spaceName = allSpacesMap.get(item.space_id) || 'Desconhecido';
-              combined.push({ ...item, type, space_name: spaceName, title: item.title || item.text } as MyDayItem);
+              const spaceData = allSpacesMap.get(item.space_id);
+              const spaceName = spaceData?.name || 'Desconhecido';
+              const groupName = groups.find(g => g.id === spaceData?.group_id)?.name || 'Desconhecido';
+              combined.push({ ...item, type, space_name: spaceName, group_name: groupName, title: item.title || item.text } as MyDayItem);
             }
           }
         });
@@ -154,7 +161,7 @@ export default function MeuDiaScreen() {
           </View>
           <View style={styles.itemRight}>
             <Text style={styles.itemTitle}>📅 {item.title}</Text>
-            <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+            <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
           </View>
         </Card>
       );
@@ -172,7 +179,7 @@ export default function MeuDiaScreen() {
                 </View>
               )}
             </View>
-            <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+            <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
           </Card>
         </TouchableOpacity>
       );
@@ -182,7 +189,7 @@ export default function MeuDiaScreen() {
       return (
         <Card elevation="level1" style={styles.noticeCard} key={'notice' + item.id}>
           <Text style={styles.itemTitle}>📌 {item.title}</Text>
-          <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+          <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
         </Card>
       );
     }
@@ -192,7 +199,7 @@ export default function MeuDiaScreen() {
         <TouchableOpacity key={'list' + item.id} onPress={() => router.push(`/(main)/lista/${item.id}` as any)} activeOpacity={0.8}>
           <Card elevation="level1" style={styles.listCard}>
             <Text style={styles.itemTitle}>📋 {item.title}</Text>
-            <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+            <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
           </Card>
         </TouchableOpacity>
       );
@@ -202,7 +209,7 @@ export default function MeuDiaScreen() {
       return (
         <Card elevation="level1" style={styles.ideaCard} key={'idea' + item.id}>
           <Text style={styles.itemTitle}>💡 {item.title}</Text>
-          <Text style={styles.spaceBadge}>📍 {item.space_name}</Text>
+          <Text style={styles.spaceBadge}>🏢 {item.group_name} / 📍 {item.space_name}</Text>
         </Card>
       );
     }
