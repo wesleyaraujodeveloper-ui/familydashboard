@@ -401,6 +401,8 @@ const getStyles = (theme: any) => StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 24,
+    borderRadius: 30,
+    backgroundColor: 'transparent',
     shadowColor: '#DB2777',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
