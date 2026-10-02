@@ -14,10 +14,11 @@ export default function GroupHomeScreen() {
   const styles = getStyles(theme);
   const { user } = useAuth();
   const { activeGroup } = useGroup();
-  const { spaces } = useSpace();
+  const { spaces, activeSpace, setActiveSpace } = useSpace();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
+  const [expandedSection, setExpandedSection] = useState<'spaces' | null>(null);
   
   // Metricas
   const [tasksToday, setTasksToday] = useState({ total: 0, done: 0, progress: 0 });
@@ -127,22 +128,44 @@ export default function GroupHomeScreen() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/gerenciar-espacos')}>
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => setExpandedSection(expandedSection === 'spaces' ? null : 'spaces')}>
             <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#064E3B' : '#DCFCE7' }]}>
               <Feather name="hash" size={24} color={theme.isDarkMode ? '#34D399' : '#16A34A'} />
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
               <Text style={styles.quickActionLabel}>Espaços</Text>
+              <Feather name={expandedSection === 'spaces' ? 'chevron-up' : 'chevron-down'} size={14} color={theme.colors.textPrimary} />
             </View>
           </TouchableOpacity>
         </View>
+
+        {expandedSection === 'spaces' && (
+          <View style={styles.expandedPanel}>
+            <Text style={styles.expandedTitle}>Espaços de {activeGroup?.name}</Text>
+            {spaces.map(space => (
+              <TouchableOpacity 
+                key={space.id} 
+                style={[styles.expandedItem, activeSpace?.id === space.id && styles.expandedItemActive]}
+                onPress={() => {
+                  setActiveSpace(space);
+                  setExpandedSection(null);
+                  router.push('/(main)/mural' as any);
+                }}
+              >
+                <Feather name="hash" size={16} color={activeSpace?.id === space.id ? theme.colors.secondary : theme.colors.textSecondary} />
+                <Text style={[styles.expandedItemText, activeSpace?.id === space.id && { color: theme.colors.secondary, fontWeight: 'bold' }]}>{space.name}</Text>
+                {activeSpace?.id === space.id && <Feather name="check" size={16} color={theme.colors.secondary} />}
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
 
         {/* METRICAS GRID */}
         <Text style={styles.sectionTitle}>O que temos para hoje?</Text>
         <View style={styles.grid}>
           
           {/* Metric 1: Tarefas de Hoje */}
-          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
+          <TouchableOpacity onPress={() => router.push('/(main)/meu-dia')} style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
               <View style={[styles.iconBox, { backgroundColor: theme.isDarkMode ? '#3A1515' : '#FEE2E2' }]}>
                 <Feather name="check-circle" size={20} color={theme.isDarkMode ? '#F87171' : '#EF4444'} />
@@ -164,10 +187,10 @@ export default function GroupHomeScreen() {
                 />
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
 
           {/* Metric 2: Compromissos */}
-          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
+          <TouchableOpacity onPress={() => router.push('/(main)/calendario')} style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
               <View style={[styles.iconBox, { backgroundColor: theme.isDarkMode ? '#1E1E3F' : '#E0E7FF' }]}>
                 <Feather name="clock" size={20} color={theme.isDarkMode ? '#818CF8' : '#6366F1'} />
@@ -189,10 +212,10 @@ export default function GroupHomeScreen() {
                 <Text style={styles.infoText}>Agenda livre!</Text>
               )}
             </View>
-          </View>
+          </TouchableOpacity>
 
           {/* Metric 3: Recados */}
-          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
+          <TouchableOpacity onPress={() => router.push('/(main)/mural')} style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
               <View style={[styles.iconBox, { backgroundColor: theme.isDarkMode ? '#3A152E' : '#FDF4FF' }]}>
                 <Feather name="heart" size={20} color={theme.isDarkMode ? '#D946EF' : '#D946EF'} />
@@ -214,10 +237,10 @@ export default function GroupHomeScreen() {
                 <Text style={styles.infoText}>Nenhuma novidade.</Text>
               )}
             </View>
-          </View>
+          </TouchableOpacity>
 
           {/* Metric 4: Atrasadas */}
-          <View style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
+          <TouchableOpacity onPress={() => router.push('/(main)/meu-dia')} style={[styles.metricCard, { backgroundColor: theme.isDarkMode ? '#1C1C1E' : 'rgba(255, 255, 255, 0.7)', borderColor: theme.isDarkMode ? '#2C2C2E' : 'rgba(255, 255, 255, 0.9)' }]}>
             <View style={styles.metricHeader}>
               <View style={[styles.iconBox, { backgroundColor: theme.isDarkMode ? '#3A2015' : '#FFEDD5' }]}>
                 <Feather name="alert-circle" size={20} color={theme.isDarkMode ? '#F97316' : '#F97316'} />
@@ -239,7 +262,7 @@ export default function GroupHomeScreen() {
                 <Text style={styles.infoText}>Tudo em dia!</Text>
               )}
             </View>
-          </View>
+          </TouchableOpacity>
 
         </View>
 
@@ -395,5 +418,43 @@ const getStyles = (theme: any) => StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  expandedPanel: {
+    backgroundColor: theme.isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.7)',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: theme.colors.border
+  },
+  expandedTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: theme.colors.textSecondary,
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5
+  },
+  expandedItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    backgroundColor: theme.isDarkMode ? '#1C1C1E' : '#FFF',
+    borderRadius: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'transparent'
+  },
+  expandedItemActive: {
+    borderColor: theme.colors.secondary,
+    backgroundColor: theme.isDarkMode ? 'rgba(236,72,153,0.1)' : 'rgba(236,72,153,0.05)'
+  },
+  expandedItemText: {
+    flex: 1,
+    fontSize: 16,
+    color: theme.colors.textPrimary,
+    marginLeft: 12,
+    fontWeight: '500'
   }
 });

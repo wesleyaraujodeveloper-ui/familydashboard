@@ -172,7 +172,9 @@ export default function MainLayout() {
         {/* ÁREA PRINCIPAL */}
         <View style={styles.mainArea}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>{activeGroup?.name || 'Família'}</Text>
+            <TouchableOpacity onPress={() => router.push('/(main)/grupo-home' as any)}>
+              <Text style={styles.headerTitle}>{activeGroup?.name || 'Família'}</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.content}>
             <Slot />
@@ -190,7 +192,9 @@ export default function MainLayout() {
           <TouchableOpacity onPress={() => setMobileMenuOpen(true)} style={{ marginRight: 16 }}>
             <Feather name="menu" size={24} color={theme.colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{activeGroup?.name || 'Família'}</Text>
+          <TouchableOpacity onPress={() => router.push('/(main)/grupo-home' as any)}>
+            <Text style={styles.headerTitle}>{activeGroup?.name || 'Família'}</Text>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={() => router.push('/(main)/notificacoes' as any)} style={{ padding: 8 }}>
           <Feather name="bell" size={24} color={theme.colors.textPrimary} />
