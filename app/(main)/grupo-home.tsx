@@ -413,4 +413,5 @@ const getStyles = (theme: any) => StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+  }
 });
