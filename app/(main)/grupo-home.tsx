@@ -50,13 +50,15 @@ export default function GroupHomeScreen() {
           setTasksToday({ total, done, progress: total > 0 ? (done / total) * 100 : 0 });
         }
 
+        const nowIso = new Date().toISOString();
+
         // Tarefas atrasadas
         const { data: overdueData } = await supabase
           .from('tasks')
           .select('id, title, due_date')
           .in('space_id', spaceIds)
-          .eq('status', 'todo')
-          .lt('due_date', todayStr + 'T00:00:00Z')
+          .neq('status', 'done')
+          .lt('due_date', nowIso)
           .limit(1);
         setOverdueTasks(overdueData || []);
 
