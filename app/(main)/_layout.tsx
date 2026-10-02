@@ -65,7 +65,7 @@ export default function MainLayout() {
       setSpaces([]);
       setActiveSpace(null as any);
     }
-    router.push('/(main)/mural' as any);
+    router.push('/(main)/grupo-home' as any);
   };
 
   const isHome = pathname === '/';
@@ -79,6 +79,10 @@ export default function MainLayout() {
       <View style={styles.desktopContainer}>
         {/* SIDEBAR DESKTOP */}
         <View style={styles.sidebar}>
+          <TouchableOpacity onPress={() => router.push('/')} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16, backgroundColor: theme.isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', padding: 8, borderRadius: 8 }}>
+            <Feather name="arrow-left" size={16} color={theme.colors.primary} />
+            <Text style={{color: theme.colors.primary, fontWeight: 'bold', fontSize: 12}}>HUB GLOBAL</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={styles.groupSwitcherBtn}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 8 }}>
               <View style={styles.groupIcon}><Feather name="users" size={16} color="#fff" /></View>
@@ -103,7 +107,7 @@ export default function MainLayout() {
           )}
 
           <View style={styles.mainNav}>
-            <SidebarLink href="/(main)" icon="home" label="Início" isActive={pathname === '/'} />
+            <SidebarLink href="/(main)/grupo-home" icon="home" label="Início do Grupo" isActive={pathname === '/grupo-home'} />
             <SidebarLink href="/(main)/meu-dia" icon="sun" label="Meu Dia" isActive={pathname === '/meu-dia'} />
             <SidebarLink href="/(main)/calendario" icon="calendar" label="Agenda" isActive={pathname === '/calendario'} />
           </View>
@@ -199,6 +203,11 @@ export default function MainLayout() {
           {/* Menu Drawer */}
           <View style={{ width: 300, backgroundColor: theme.colors.surface, height: '100%', padding: theme.spacing.lg, paddingTop: 60, elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10 }}>
             
+            <TouchableOpacity onPress={() => { setMobileMenuOpen(false); router.push('/'); }} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16, backgroundColor: theme.isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', padding: 8, borderRadius: 8 }}>
+              <Feather name="arrow-left" size={16} color={theme.colors.primary} />
+              <Text style={{color: theme.colors.primary, fontWeight: 'bold', fontSize: 12}}>HUB GLOBAL</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => setShowGroupSwitcher(!showGroupSwitcher)} style={styles.groupSwitcherBtn}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1, marginRight: 8 }}>
                 <View style={styles.groupIcon}><Feather name="users" size={16} color="#fff" /></View>
@@ -222,7 +231,7 @@ export default function MainLayout() {
             )}
 
             <View style={styles.mainNav}>
-              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)' as any); }} icon="home" label="Início" isActive={pathname === '/'} />
+              <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/grupo-home' as any); }} icon="home" label="Início do Grupo" isActive={pathname === '/grupo-home'} />
               <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/meu-dia' as any); }} icon="sun" label="Meu Dia" isActive={pathname === '/meu-dia'} />
               <SidebarLink onPress={() => { setMobileMenuOpen(false); router.push('/(main)/calendario' as any); }} icon="calendar" label="Agenda" isActive={pathname === '/calendario'} />
             </View>
