@@ -49,7 +49,7 @@ export default function GlobalHubScreen() {
       setSpaces([]);
       setActiveSpace(null as any);
     }
-    router.push('/(main)/mural');
+    router.push('/(main)/grupo-home');
   };
 
   if (loading) {
