@@ -34,15 +34,21 @@ export default function GroupHomeScreen() {
       const spaceIds = spaces.map(s => s.id);
 
       if (spaceIds.length > 0) {
-        const todayStr = new Date().toISOString().split('T')[0];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const endOfToday = new Date();
+        endOfToday.setHours(23, 59, 59, 999);
+        const todayIso = today.toISOString();
+        const endOfTodayIso = endOfToday.toISOString();
+        const nowIso = new Date().toISOString();
         
         // Tarefas de hoje
         const { data: tasksData } = await supabase
           .from('tasks')
           .select('id, status')
           .in('space_id', spaceIds)
-          .gte('due_date', todayStr + 'T00:00:00Z')
-          .lt('due_date', todayStr + 'T23:59:59Z');
+          .gte('due_date', todayIso)
+          .lte('due_date', endOfTodayIso);
         
         if (tasksData) {
           const total = tasksData.length;
@@ -50,7 +56,7 @@ export default function GroupHomeScreen() {
           setTasksToday({ total, done, progress: total > 0 ? (done / total) * 100 : 0 });
         }
 
-        const nowIso = new Date().toISOString();
+
 
         // Tarefas atrasadas
         const { data: overdueData } = await supabase
@@ -67,7 +73,7 @@ export default function GroupHomeScreen() {
           .from('events')
           .select('id, title, start_time')
           .in('space_id', spaceIds)
-          .gte('start_time', todayStr + 'T00:00:00Z')
+          .gte('start_time', todayIso)
           .order('start_time', { ascending: true })
           .limit(2);
         setUpcomingEvents(eventsData || []);
