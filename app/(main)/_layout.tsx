@@ -68,6 +68,12 @@ export default function MainLayout() {
     router.push('/(main)/mural' as any);
   };
 
+  const isHome = pathname === '/';
+
+  if (isHome) {
+    return <Slot />;
+  }
+
   if (isDesktop) {
     return (
       <View style={styles.desktopContainer}>
