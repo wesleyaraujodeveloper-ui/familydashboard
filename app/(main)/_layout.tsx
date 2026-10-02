@@ -305,9 +305,9 @@ export default function MainLayout() {
 
       {/* BOTTOM TABS MOBILE */}
       <View style={styles.bottomTabs}>
-        <TouchableOpacity onPress={() => router.push('/(main)' as any)} style={styles.tabItemContainer}>
-          <Feather name="home" size={24} color={pathname === '/' ? theme.colors.primary : theme.colors.textSecondary} />
-          <Text style={[styles.tabItem, pathname === '/' ? { color: theme.colors.primary } : null]}>Início</Text>
+        <TouchableOpacity onPress={() => router.push('/(main)/grupo-home' as any)} style={styles.tabItemContainer}>
+          <Feather name="home" size={24} color={pathname === '/grupo-home' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabItem, pathname === '/grupo-home' ? { color: theme.colors.primary } : null]}>Início</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/(main)/meu-dia' as any)} style={styles.tabItemContainer}>
           <Feather name="sun" size={24} color={pathname === '/meu-dia' ? theme.colors.primary : theme.colors.textSecondary} />
