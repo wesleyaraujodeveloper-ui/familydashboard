@@ -111,11 +111,29 @@ export default function GroupHomeScreen() {
             <Text style={styles.quickActionLabel}>Mural</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/meu-dia')}>
+            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#3A0C1E' : '#FCE7F3' }]}>
+              <Feather name="sun" size={24} color={theme.isDarkMode ? '#F472B6' : '#EC4899'} />
+            </View>
+            <Text style={styles.quickActionLabel}>Meu Dia</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/')}>
+            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#451A03' : '#FEF3C7' }]}>
+              <Feather name="grid" size={24} color={theme.isDarkMode ? '#FBBF24' : '#D97706'} />
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
+              <Text style={styles.quickActionLabel}>Hub</Text>
+            </View>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/gerenciar-espacos')}>
             <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#064E3B' : '#DCFCE7' }]}>
               <Feather name="hash" size={24} color={theme.isDarkMode ? '#34D399' : '#16A34A'} />
             </View>
-            <Text style={styles.quickActionLabel}>Espaços</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
+              <Text style={styles.quickActionLabel}>Espaços</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -257,31 +275,26 @@ const getStyles = (theme: any) => StyleSheet.create({
   },
   quickActionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: 16,
+    justifyContent: 'space-between',
     marginBottom: 32,
     paddingHorizontal: 4
   },
   quickActionBox: {
     alignItems: 'center',
-    width: '30%',
-    backgroundColor: theme.colors.surface,
-    paddingVertical: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+    width: '22%'
   },
   quickActionIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 20,
+    width: 64,
+    height: 64,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
+    backgroundColor: '#FFF',
     shadowColor: '#6366F1',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 12,
     elevation: 3,
   },
   quickActionLabel: {
