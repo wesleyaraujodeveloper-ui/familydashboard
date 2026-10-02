@@ -102,63 +102,41 @@ export default function GroupHomeScreen() {
     <LinearGradient colors={gradientColors} style={styles.mainContainer}>
       <ScrollView style={styles.scrollArea} showsVerticalScrollIndicator={false}>
         
-        {/* QUICK ACTIONS */}
-        <Text style={styles.sectionTitle}>Acesso Rápido</Text>
-        <View style={styles.quickActionsContainer}>
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/mural')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#0A192F' : '#DBEAFE' }]}>
-              <Feather name="layout" size={24} color={theme.isDarkMode ? '#38BDF8' : '#3B82F6'} />
-            </View>
-            <Text style={styles.quickActionLabel}>Mural</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/(main)/meu-dia')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#3A0C1E' : '#FCE7F3' }]}>
-              <Feather name="sun" size={24} color={theme.isDarkMode ? '#F472B6' : '#EC4899'} />
-            </View>
-            <Text style={styles.quickActionLabel}>Meu Dia</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => router.push('/')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#451A03' : '#FEF3C7' }]}>
-              <Feather name="grid" size={24} color={theme.isDarkMode ? '#FBBF24' : '#D97706'} />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
-              <Text style={styles.quickActionLabel}>Hub</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickActionBox} onPress={() => setExpandedSection(expandedSection === 'spaces' ? null : 'spaces')}>
-            <View style={[styles.quickActionIcon, { backgroundColor: theme.isDarkMode ? '#064E3B' : '#DCFCE7' }]}>
-              <Feather name="hash" size={24} color={theme.isDarkMode ? '#34D399' : '#16A34A'} />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
-              <Text style={styles.quickActionLabel}>Espaços</Text>
-              <Feather name={expandedSection === 'spaces' ? 'chevron-up' : 'chevron-down'} size={14} color={theme.colors.textPrimary} />
-            </View>
+        {/* ESPAÇOS LIST */}
+        <View style={styles.spacesHeader}>
+          <Text style={styles.sectionTitle}>Espaços</Text>
+          <TouchableOpacity onPress={() => router.push('/(main)/criar-espaco' as any)}>
+            <Feather name="plus-circle" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
         </View>
 
-        {expandedSection === 'spaces' && (
-          <View style={styles.expandedPanel}>
-            <Text style={styles.expandedTitle}>Espaços de {activeGroup?.name}</Text>
-            {spaces.map(space => (
+        <View style={styles.spacesList}>
+          {spaces.length === 0 ? (
+            <View style={{ padding: 20, alignItems: 'center' }}>
+              <Text style={{ color: theme.colors.textSecondary }}>Nenhum espaço criado.</Text>
+            </View>
+          ) : (
+            spaces.map(space => (
               <TouchableOpacity 
                 key={space.id} 
-                style={[styles.expandedItem, activeSpace?.id === space.id && styles.expandedItemActive]}
+                style={styles.spaceCard}
                 onPress={() => {
                   setActiveSpace(space);
-                  setExpandedSection(null);
                   router.push('/(main)/mural' as any);
                 }}
               >
-                <Feather name="hash" size={16} color={activeSpace?.id === space.id ? theme.colors.secondary : theme.colors.textSecondary} />
-                <Text style={[styles.expandedItemText, activeSpace?.id === space.id && { color: theme.colors.secondary, fontWeight: 'bold' }]}>{space.name}</Text>
-                {activeSpace?.id === space.id && <Feather name="check" size={16} color={theme.colors.secondary} />}
+                <View style={styles.spaceIconWrapper}>
+                  <Feather name="hash" size={24} color={theme.colors.primary} />
+                </View>
+                <View style={styles.spaceInfo}>
+                  <Text style={styles.spaceName}>{space.name}</Text>
+                  <Text style={styles.spaceSub}>Toque para entrar neste espaço</Text>
+                </View>
+                <Feather name="chevron-right" size={20} color={theme.colors.textMuted} />
               </TouchableOpacity>
-            ))}
-          </View>
-        )}
+            ))
+          )}
+        </View>
 
         {/* METRICAS GRID */}
         <Text style={styles.sectionTitle}>O que temos para hoje?</Text>
@@ -288,42 +266,59 @@ export default function GroupHomeScreen() {
 const getStyles = (theme: any) => StyleSheet.create({
   mainContainer: { flex: 1 },
   scrollArea: { flex: 1, padding: theme.spacing.lg },
+  spacesHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    marginTop: 20,
+    marginLeft: 4,
+  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '800',
     color: theme.isDarkMode ? '#FFFFFF' : '#1E1B4B',
-    marginBottom: 16,
-    marginLeft: 4,
-    marginTop: 20,
   },
-  quickActionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  spacesList: {
+    gap: 12,
     marginBottom: 32,
-    paddingHorizontal: 4
   },
-  quickActionBox: {
+  spaceCard: {
+    flexDirection: 'row',
     alignItems: 'center',
-    width: '22%'
+    backgroundColor: theme.colors.surface,
+    padding: 20,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  quickActionIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 24,
+  spaceIconWrapper: {
+    width: 50,
+    height: 50,
+    borderRadius: 16,
+    backgroundColor: theme.isDarkMode ? 'rgba(236, 72, 153, 0.15)' : 'rgba(236, 72, 153, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
-    backgroundColor: '#FFF',
-    shadowColor: '#6366F1',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 3,
+    marginRight: 16,
   },
-  quickActionLabel: {
-    fontSize: 14,
+  spaceInfo: {
+    flex: 1,
+  },
+  spaceName: {
+    fontSize: 18,
     fontWeight: '700',
-    color: theme.colors.textPrimary
+    color: theme.colors.textPrimary,
+    marginBottom: 4,
+  },
+  spaceSub: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    fontWeight: '500',
   },
   grid: {
     flexDirection: 'row',
@@ -418,43 +413,4 @@ const getStyles = (theme: any) => StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  expandedPanel: {
-    backgroundColor: theme.isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.7)',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: theme.colors.border
-  },
-  expandedTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: theme.colors.textSecondary,
-    marginBottom: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5
-  },
-  expandedItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    backgroundColor: theme.isDarkMode ? '#1C1C1E' : '#FFF',
-    borderRadius: 12,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: 'transparent'
-  },
-  expandedItemActive: {
-    borderColor: theme.colors.secondary,
-    backgroundColor: theme.isDarkMode ? 'rgba(236,72,153,0.1)' : 'rgba(236,72,153,0.05)'
-  },
-  expandedItemText: {
-    flex: 1,
-    fontSize: 16,
-    color: theme.colors.textPrimary,
-    marginLeft: 12,
-    fontWeight: '500'
-  }
 });
